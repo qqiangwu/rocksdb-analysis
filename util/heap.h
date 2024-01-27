@@ -39,7 +39,7 @@ namespace ROCKSDB_NAMESPACE {
 // less-than relation, but top() will return the maximum.
 
 template <typename T, typename Compare = std::less<T>>
-class BinaryHeap {
+class [[gsl::Owner(T)]] BinaryHeap {
  public:
   BinaryHeap() {}
   explicit BinaryHeap(Compare cmp) : cmp_(std::move(cmp)) {}

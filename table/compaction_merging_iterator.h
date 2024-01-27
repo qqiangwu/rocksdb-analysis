@@ -7,6 +7,7 @@
 #pragma once
 
 #include "db/range_del_aggregator.h"
+#include "rocksdb/rocksdb_namespace.h"
 #include "rocksdb/slice.h"
 #include "rocksdb/types.h"
 #include "table/merging_iterator.h"
@@ -37,7 +38,7 @@ namespace ROCKSDB_NAMESPACE {
 class CompactionMergingIterator;
 
 InternalIterator* NewCompactionMergingIterator(
-    const InternalKeyComparator* comparator, InternalIterator** children, int n,
+    const InternalKeyComparator* comparator, InternalIterator** children CPPSAFE_LIFETIME_IN, int n,
     std::vector<std::pair<TruncatedRangeDelIterator*,
                           TruncatedRangeDelIterator***>>& range_tombstone_iters,
     Arena* arena = nullptr);

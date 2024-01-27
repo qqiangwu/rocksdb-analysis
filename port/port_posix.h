@@ -145,7 +145,7 @@ class RWMutex {
   pthread_rwlock_t mu_;  // the underlying platform mutex
 };
 
-class CondVar {
+class [[gsl::Pointer(Mutex)]] CondVar {
  public:
   explicit CondVar(Mutex* mu);
   ~CondVar();

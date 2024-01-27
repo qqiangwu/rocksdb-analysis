@@ -10,6 +10,7 @@
 #include "options/db_options.h"
 #include "rocksdb/io_status.h"
 #include "rocksdb/listener.h"
+#include "rocksdb/rocksdb_namespace.h"
 #include "rocksdb/status.h"
 #include "util/autovector.h"
 
@@ -56,6 +57,7 @@ class ErrorHandler {
   Status::Severity GetErrorSeverity(BackgroundErrorReason reason,
                                     Status::Code code, Status::SubCode subcode);
 
+  CPPSAFE_POST("return", "this")
   const Status& SetBGError(const Status& bg_err, BackgroundErrorReason reason);
 
   Status GetBGError() const { return bg_error_; }
@@ -128,10 +130,12 @@ class ErrorHandler {
   // unsorted.
   autovector<uint64_t> files_to_quarantine_;
 
+  CPPSAFE_POST("return", "this")
   const Status& HandleKnownErrors(const Status& bg_err,
                                   BackgroundErrorReason reason);
   Status OverrideNoSpaceError(const Status& bg_error, bool* auto_recovery);
   void RecoverFromNoSpace();
+  CPPSAFE_POST("return", "this")
   const Status& StartRecoverFromRetryableBGIOError(const IOStatus& io_error);
   void RecoverFromRetryableBGIOError();
   // First, if it is in recovery and the recovery_error is ok. Set the

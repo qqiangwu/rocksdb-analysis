@@ -71,7 +71,7 @@ class CacheWithSecondaryAdapter : public CacheWrapper {
       const Slice& key, const CacheItemHelper* helper, Priority priority,
       Statistics* stats, bool found_dummy_entry, bool kept_in_sec_cache);
 
-  bool ProcessDummyResult(Cache::Handle** handle, bool erase);
+  bool ProcessDummyResult(CPPSAFE_LIFETIME_IN Cache::Handle** handle, bool erase);
 
   void CleanupCacheObject(ObjectPtr obj, const CacheItemHelper* helper);
 

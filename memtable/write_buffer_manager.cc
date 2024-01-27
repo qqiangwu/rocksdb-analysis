@@ -169,6 +169,7 @@ void WriteBufferManager::RemoveDBFromQueue(StallInterface* wbm_stall) {
   // Deallocate the removed nodes outside of the lock.
   std::list<StallInterface*> cleanup;
 
+  [[gsl::suppress("lifetime")]]
   if (enabled() && allow_stall_.load(std::memory_order_relaxed)) {
     std::unique_lock<std::mutex> lock(mu_);
     for (auto it = queue_.begin(); it != queue_.end();) {

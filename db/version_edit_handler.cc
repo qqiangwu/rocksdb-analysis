@@ -17,6 +17,7 @@
 #include "db/version_edit.h"
 #include "logging/logging.h"
 #include "monitoring/persistent_stats_history.h"
+#include "rocksdb/rocksdb_namespace.h"
 #include "util/udt_util.h"
 
 namespace ROCKSDB_NAMESPACE {

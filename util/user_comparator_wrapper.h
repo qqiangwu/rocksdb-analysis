@@ -15,7 +15,7 @@ namespace ROCKSDB_NAMESPACE {
 
 // Wrapper of user comparator, with auto increment to
 // perf_context.user_key_comparison_count.
-class UserComparatorWrapper {
+class [[gsl::Pointer(Comparator)]] UserComparatorWrapper {
  public:
   // `UserComparatorWrapper`s constructed with the default constructor are not
   // usable and will segfault on any attempt to use them for comparisons.

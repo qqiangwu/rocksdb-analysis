@@ -15,6 +15,7 @@
 #include <utility>
 
 #include "rocksdb/comparator.h"
+#include "rocksdb/rocksdb_namespace.h"
 #include "rocksdb/slice.h"
 #include "rocksdb/slice_transform.h"
 #include "rocksdb/types.h"
@@ -106,7 +107,7 @@ extern const std::string kDisableUserTimestamp;
 
 // The data structure that represents an internal key in the way that user_key,
 // sequence number and type are stored in separated forms.
-struct ParsedInternalKey {
+struct [[gsl::Pointer(const char)]] ParsedInternalKey {
   Slice user_key;
   SequenceNumber sequence;
   ValueType type;
@@ -374,7 +375,7 @@ class InternalKeyComparator
 };
 
 // The class represent the internal key in encoded form.
-class InternalKey {
+class [[gsl::Owner(char)]] InternalKey {
  private:
   std::string rep_;
 
@@ -646,11 +647,13 @@ class IterKey {
   // If user-defined timestamp is enabled, then `key` includes timestamp.
   // TODO(yanqin) this is also used to set prefix, which do not include
   // timestamp. Should be handled.
+  CPPSAFE_POST(Return, "*this", "*key")
   Slice SetUserKey(const Slice& key, bool copy = true) {
     is_user_key_ = true;
     return SetKeyImpl(key, copy);
   }
 
+  CPPSAFE_POST(Return, "*this", "*key")
   Slice SetInternalKey(const Slice& key, bool copy = true) {
     is_user_key_ = false;
     return SetKeyImpl(key, copy);
@@ -658,6 +661,7 @@ class IterKey {
 
   // Copies the content of key, updates the reference to the user key in ikey
   // and returns a Slice referencing the new copy.
+  CPPSAFE_POST(Return, "*this")
   Slice SetInternalKey(const Slice& key, ParsedInternalKey* ikey) {
     size_t key_n = key.size();
     assert(key_n >= kNumInternalBytes);
@@ -816,7 +820,7 @@ class IterKey {
 
 // Convert from a SliceTransform of user keys, to a SliceTransform of
 // internal keys.
-class InternalKeySliceTransform : public SliceTransform {
+class [[gsl::Pointer(SliceTransform)]] InternalKeySliceTransform : public SliceTransform {
  public:
   explicit InternalKeySliceTransform(const SliceTransform* transform)
       : transform_(transform) {}
@@ -858,7 +862,7 @@ bool ReadKeyFromWriteBatchEntry(Slice* input, Slice* key, bool cf_record);
 // input will be advanced to after the record.
 // If user-defined timestamp is enabled for a column family, then the `key`
 // resulting from this call will include timestamp.
-Status ReadRecordFromWriteBatch(Slice* input, char* tag,
+Status ReadRecordFromWriteBatch(CPPSAFE_LIFETIME_IN Slice* input, char* tag,
                                 uint32_t* column_family, Slice* key,
                                 Slice* value, Slice* blob, Slice* xid);
 

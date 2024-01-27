@@ -658,7 +658,8 @@ Status WriteUnpreparedTxn::WriteRollbackKeys(
     ReadCallback* callback, const ReadOptions& roptions) {
   // This assertion can be removed when range lock is supported.
   assert(lock_tracker.IsPointLockSupported());
-  const auto& cf_map = *wupt_db_->GetCFHandleMap();
+  const auto& handle = wupt_db_->GetCFHandleMap();
+  const auto& cf_map = *handle;
   auto WriteRollbackKey = [&](const std::string& key, uint32_t cfid) {
     const auto& cf_handle = cf_map.at(cfid);
     PinnableSlice pinnable_val;

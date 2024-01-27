@@ -20,7 +20,7 @@ class ColumnFamilyHandle;
 
 // Class representing a wide column, which is defined as a pair of column name
 // and column value.
-class WideColumn {
+class [[gsl::Pointer(char)]] WideColumn {
  public:
   WideColumn() = default;
 
@@ -242,7 +242,7 @@ class AttributeGroup {
 using AttributeGroups = std::vector<AttributeGroup>;
 
 // Used in Read Path. Wide-columns returned from the query are pinnable.
-class PinnableAttributeGroup {
+class [[gsl::Pointer(ColumnFamilyHandle)]] PinnableAttributeGroup {
  public:
   ColumnFamilyHandle* column_family() const { return column_family_; }
   const Status& status() const { return status_; }

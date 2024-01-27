@@ -34,6 +34,7 @@
 #include "rocksdb/filter_policy.h"
 #include "rocksdb/io_status.h"
 #include "rocksdb/options.h"
+#include "rocksdb/rocksdb_namespace.h"
 #include "rocksdb/slice.h"
 #include "rocksdb/sst_file_writer.h"
 #include "rocksdb/statistics.h"

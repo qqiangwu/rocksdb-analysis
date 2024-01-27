@@ -71,6 +71,7 @@ extern bool ShouldPersistUDT(const UserDefinedTimestampTestMode& test_mode);
 // Store in *dst a string of length "len" that will compress to
 // "N*compressed_fraction" bytes and return a Slice that references
 // the generated data.
+[[clang::annotate("cppsafe::may_discard")]]
 extern Slice CompressibleString(Random* rnd, double compressed_fraction,
                                 int len, std::string* dst);
 
@@ -213,7 +214,7 @@ class RandomRWStringSink : public FSRandomRWFile {
   IOStatus Read(uint64_t offset, size_t n, const IOOptions& /*opts*/,
                 Slice* result, char* /*scratch*/,
                 IODebugContext* /*dbg*/) const override {
-    *result = Slice(nullptr, 0);
+    *result = Slice("", 0);
     if (offset < ss_->contents_.size()) {
       size_t str_res_sz =
           std::min(static_cast<size_t>(ss_->contents_.size() - offset), n);

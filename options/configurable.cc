@@ -9,6 +9,7 @@
 #include "options/configurable_helper.h"
 #include "options/options_helper.h"
 #include "rocksdb/customizable.h"
+#include "rocksdb/rocksdb_namespace.h"
 #include "rocksdb/status.h"
 #include "rocksdb/utilities/object_registry.h"
 #include "rocksdb/utilities/options_type.h"
@@ -309,6 +310,7 @@ Status ConfigurableHelper::ConfigureSomeOptions(
         } else {
           found++;
           it = options->erase(it);
+          __lifetime_pmap();
           if (!s.ok()) {
             result = s;
           }

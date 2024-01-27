@@ -898,6 +898,7 @@ class OptionTypeInfo {
   // For "embedded" options (like structs), elem_name may be opt_name
   // or a field within the opt_name.  For example, given the struct "struct",
   // and opt_name of "struct.field", elem_name will be "field"
+  CPPSAFE_POST("return", "*opt_map")
   static const OptionTypeInfo* Find(
       const std::string& opt_name,
       const std::unordered_map<std::string, OptionTypeInfo>& opt_map,

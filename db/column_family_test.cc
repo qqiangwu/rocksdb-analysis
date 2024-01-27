@@ -116,7 +116,8 @@ class ColumnFamilyTestBase : public testing::Test {
       }
 
       int keyi = base + i;
-      Slice key(DBTestBase::Key(keyi));
+      auto rawkey = DBTestBase::Key(keyi);
+      Slice key(rawkey);
 
       batch.Clear();
       batch.Put(handles_[0], key, Value(keyi, &value_space));

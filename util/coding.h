@@ -20,6 +20,7 @@
 #include <string>
 
 #include "port/port.h"
+#include "rocksdb/rocksdb_namespace.h"
 #include "rocksdb/slice.h"
 #include "util/coding_lean.h"
 
@@ -63,7 +64,7 @@ extern bool GetFixed16(Slice* input, uint16_t* value);
 extern bool GetVarint32(Slice* input, uint32_t* value);
 extern bool GetVarint64(Slice* input, uint64_t* value);
 extern bool GetVarsignedint64(Slice* input, int64_t* value);
-extern bool GetLengthPrefixedSlice(Slice* input, Slice* result);
+extern bool GetLengthPrefixedSlice(Slice* input CPPSAFE_LIFETIME_IN, Slice* result);
 // This function assumes data is well-formed.
 extern Slice GetLengthPrefixedSlice(const char* data);
 
@@ -82,10 +83,13 @@ inline int64_t zigzagToI64(uint64_t n) {
 // in *v and return a pointer just past the parsed value, or return
 // nullptr on error.  These routines only look at bytes in the range
 // [p..limit-1]
+CPPSAFE_POST("return", "p")
 extern const char* GetVarint32Ptr(const char* p, const char* limit,
                                   uint32_t* v);
+CPPSAFE_POST("return", "p")
 extern const char* GetVarint64Ptr(const char* p, const char* limit,
                                   uint64_t* v);
+CPPSAFE_POST("return", "p")
 inline const char* GetVarsignedint64Ptr(const char* p, const char* limit,
                                         int64_t* value) {
   uint64_t u = 0;
@@ -104,8 +108,10 @@ extern char* EncodeVarint32(char* dst, uint32_t value);
 extern char* EncodeVarint64(char* dst, uint64_t value);
 
 // Internal routine for use by fallback path of GetVarint32Ptr
+CPPSAFE_POST("return", "p")
 extern const char* GetVarint32PtrFallback(const char* p, const char* limit,
                                           uint32_t* value);
+CPPSAFE_POST("return", "p")
 inline const char* GetVarint32Ptr(const char* p, const char* limit,
                                   uint32_t* value) {
   if (p < limit) {
@@ -320,7 +326,7 @@ inline bool GetVarsignedint64(Slice* input, int64_t* value) {
   }
 }
 
-inline bool GetLengthPrefixedSlice(Slice* input, Slice* result) {
+inline bool GetLengthPrefixedSlice2(Slice* input CPPSAFE_LIFETIME_IN, Slice* result) {
   uint32_t len = 0;
   if (GetVarint32(input, &len) && input->size() >= len) {
     *result = Slice(input->data(), len);

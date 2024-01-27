@@ -9,6 +9,7 @@
 #include <string>
 
 #include "rocksdb/db.h"
+#include "rocksdb/rocksdb_namespace.h"
 
 #ifdef _WIN32
 // Windows API macro interference
@@ -98,6 +99,7 @@ class StackableDB : public DB {
   }
 
   using DB::Get;
+  CPPSAFE_POST("*value", "this")
   virtual Status Get(const ReadOptions& options,
                      ColumnFamilyHandle* column_family, const Slice& key,
                      PinnableSlice* value) override {

@@ -35,29 +35,37 @@ class RelaxedAtomic {
   explicit RelaxedAtomic(T initial = {}) : v_(initial) {}
   void StoreRelaxed(T desired) { v_.store(desired, std::memory_order_relaxed); }
   T LoadRelaxed() const { return v_.load(std::memory_order_relaxed); }
+  [[clang::annotate("cppsafe::may_discard")]]
   bool CasWeakRelaxed(T& expected, T desired) {
     return v_.compare_exchange_weak(expected, desired,
                                     std::memory_order_relaxed);
   }
+  [[clang::annotate("cppsafe::may_discard")]]
   bool CasStrongRelaxed(T& expected, T desired) {
     return v_.compare_exchange_strong(expected, desired,
                                       std::memory_order_relaxed);
   }
+  [[clang::annotate("cppsafe::may_discard")]]
   T ExchangeRelaxed(T desired) {
     return v_.exchange(desired, std::memory_order_relaxed);
   }
+  [[clang::annotate("cppsafe::may_discard")]]
   T FetchAddRelaxed(T operand) {
     return v_.fetch_add(operand, std::memory_order_relaxed);
   }
+  [[clang::annotate("cppsafe::may_discard")]]
   T FetchSubRelaxed(T operand) {
     return v_.fetch_sub(operand, std::memory_order_relaxed);
   }
+  [[clang::annotate("cppsafe::may_discard")]]
   T FetchAndRelaxed(T operand) {
     return v_.fetch_and(operand, std::memory_order_relaxed);
   }
+  [[clang::annotate("cppsafe::may_discard")]]
   T FetchOrRelaxed(T operand) {
     return v_.fetch_or(operand, std::memory_order_relaxed);
   }
+  [[clang::annotate("cppsafe::may_discard")]]
   T FetchXorRelaxed(T operand) {
     return v_.fetch_xor(operand, std::memory_order_relaxed);
   }

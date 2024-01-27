@@ -253,7 +253,7 @@ class Footer {
 };
 
 // Builder for Footer
-class FooterBuilder {
+class [[gsl::Owner(char)]] FooterBuilder {
  public:
   // Run builder in inputs. This is a single step with lots of parameters for
   // efficiency (based on perf testing).

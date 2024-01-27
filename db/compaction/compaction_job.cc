@@ -1654,6 +1654,8 @@ Status CompactionJob::FinishCompactionOutputFile(
 
   if (s.ok() && (current_entries > 0 || tp.num_range_deletions > 0)) {
     // Output to event logger and fire events.
+    assert(meta != nullptr);
+
     outputs.UpdateTableProperties();
     ROCKS_LOG_INFO(db_options_.info_log,
                    "[%s] [JOB %d] Generated table #%" PRIu64 ": %" PRIu64

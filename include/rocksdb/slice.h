@@ -29,7 +29,7 @@
 
 namespace ROCKSDB_NAMESPACE {
 
-class Slice {
+class [[gsl::Pointer(const char)]] Slice {
  public:
   // Create an empty slice.
   Slice() : data_(""), size_(0) {}
@@ -135,7 +135,7 @@ class Slice {
  * to avoid memcpy by having the PinnableSlice object referring to the data
  * that is locked in the memory and release them after the data is consumed.
  */
-class PinnableSlice : public Slice, public Cleanable {
+class [[gsl::Owner(const char)]] PinnableSlice : public Slice, public Cleanable {
  public:
   PinnableSlice() { buf_ = &self_space_; }
   explicit PinnableSlice(std::string* buf) { buf_ = buf; }
@@ -210,6 +210,7 @@ class PinnableSlice : public Slice, public Cleanable {
     size_ = 0;
   }
 
+  [[clang::annotate("gsl::lifetime_post", Return, "*this")]]
   inline std::string* GetSelf() { return buf_; }
 
   inline bool IsPinned() const { return pinned_; }

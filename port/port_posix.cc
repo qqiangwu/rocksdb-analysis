@@ -7,6 +7,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file. See the AUTHORS file for names of contributors.
 
+#include "rocksdb/rocksdb_namespace.h"
 #if !defined(OS_WIN)
 
 #include "port/port_posix.h"
@@ -230,6 +231,7 @@ void* cacheline_aligned_alloc(size_t size) {
 #elif (_POSIX_C_SOURCE >= 200112L || _XOPEN_SOURCE >= 600 || defined(__APPLE__))
   void* m;
   errno = posix_memalign(&m, CACHE_LINE_SIZE, size);
+  CPPSAFE_SUPPRESS_LIFETIME
   return errno ? nullptr : m;
 #else
   return malloc(size);

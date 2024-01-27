@@ -9,6 +9,7 @@
 #include <string>
 #include <vector>
 
+#include "rocksdb/rocksdb_namespace.h"
 #include "rocksdb/slice.h"
 
 namespace ROCKSDB_NAMESPACE {
@@ -116,6 +117,7 @@ class MergeContext {
   }
 
  private:
+  CPPSAFE_REINITIALIZES
   void Initialize() {
     if (!operand_list_) {
       operand_list_.reset(new std::vector<Slice>());

@@ -28,6 +28,7 @@
 #include "rocksdb/customizable.h"
 #include "rocksdb/functor_wrapper.h"
 #include "rocksdb/port_defs.h"
+#include "rocksdb/rocksdb_namespace.h"
 #include "rocksdb/status.h"
 #include "rocksdb/thread_status.h"
 
@@ -188,9 +189,9 @@ class Env : public Customizable {
   // prepared)
   // @return not-OK if the load failed.
   static Status CreateFromString(const ConfigOptions& config_options,
-                                 const std::string& value, Env** result);
+                                 const std::string& value, Env** result CPPSAFE_LIFETIME_INOUT);
   static Status CreateFromString(const ConfigOptions& config_options,
-                                 const std::string& value, Env** result,
+                                 const std::string& value, Env** result CPPSAFE_LIFETIME_INOUT,
                                  std::shared_ptr<Env>* guard);
 
   // Loads the environment specified by the env and fs uri.
@@ -642,6 +643,7 @@ class Env : public Customizable {
   // Returns the pointer to ThreadStatusUpdater.  This function will be
   // used in RocksDB internally to update thread status and supports
   // GetThreadList().
+  CPPSAFE_SUPPRESS_LIFETIME
   virtual ThreadStatusUpdater* GetThreadStatusUpdater() const {
     return thread_status_updater_;
   }
@@ -742,6 +744,7 @@ class SequentialFile {
 
   // Positioned Read for direct I/O
   // If Direct I/O enabled, offset, n, and scratch should be properly aligned
+  CPPSAFE_SUPPRESS_LIFETIME
   virtual Status PositionedRead(uint64_t /*offset*/, size_t /*n*/,
                                 Slice* /*result*/, char* /*scratch*/) {
     return Status::NotSupported(

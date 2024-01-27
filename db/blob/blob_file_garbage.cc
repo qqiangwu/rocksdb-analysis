@@ -9,6 +9,7 @@
 #include <sstream>
 
 #include "logging/event_logger.h"
+#include "rocksdb/rocksdb_namespace.h"
 #include "rocksdb/slice.h"
 #include "rocksdb/status.h"
 #include "test_util/sync_point.h"

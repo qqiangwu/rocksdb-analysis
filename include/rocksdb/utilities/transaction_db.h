@@ -11,6 +11,7 @@
 
 #include "rocksdb/comparator.h"
 #include "rocksdb/db.h"
+#include "rocksdb/rocksdb_namespace.h"
 #include "rocksdb/utilities/stackable_db.h"
 #include "rocksdb/utilities/transaction.h"
 

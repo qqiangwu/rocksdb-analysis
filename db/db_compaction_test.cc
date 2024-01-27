@@ -18,6 +18,7 @@
 #include "port/stack_trace.h"
 #include "rocksdb/concurrent_task_limiter.h"
 #include "rocksdb/experimental.h"
+#include "rocksdb/rocksdb_namespace.h"
 #include "rocksdb/sst_file_writer.h"
 #include "test_util/mock_time_env.h"
 #include "test_util/sync_point.h"
@@ -357,6 +358,7 @@ void VerifyCompactionResult(
 #endif
 }
 
+CPPSAFE_POST("return", "*cf_meta")
 const SstFileMetaData* PickFileRandomly(const ColumnFamilyMetaData& cf_meta,
                                         Random* rand, int* level = nullptr) {
   auto file_id = rand->Uniform(static_cast<int>(cf_meta.file_count)) + 1;

@@ -17,7 +17,7 @@
 namespace ROCKSDB_NAMESPACE {
 
 // A helper class useful for DBImpl::Get()
-class LookupKey {
+class [[gsl::Owner(char)]] LookupKey {
  public:
   // Initialize *this for looking up user_key at a snapshot with
   // the specified sequence number.

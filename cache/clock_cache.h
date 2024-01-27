@@ -578,6 +578,7 @@ class FixedHyperClockTable : public BaseClockTable {
 
   HandleImpl* Lookup(const UniqueId64x2& hashed_key);
 
+  [[clang::annotate("cppsafe::may_discard")]]
   bool Release(HandleImpl* handle, bool useful, bool erase_if_last_ref);
 
   void Erase(const UniqueId64x2& hashed_key);

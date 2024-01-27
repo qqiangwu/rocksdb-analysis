@@ -10,6 +10,7 @@
 #include <array>
 #include <utility>
 
+#include "rocksdb/rocksdb_namespace.h"
 #include "util/autovector.h"
 
 namespace ROCKSDB_NAMESPACE {
@@ -24,7 +25,7 @@ namespace ROCKSDB_NAMESPACE {
 // This implementation uses autovector as hash chains insteads.
 //
 template <typename K, typename V, size_t size = 128>
-class HashMap {
+class [[gsl::Owner(V)]] HashMap {
   std::array<autovector<std::pair<K, V>, 1>, size> table_;
 
  public:

@@ -391,8 +391,8 @@ class FastLocalBloomBitsBuilder : public XXPH3FilterBitsBuilder {
     TEST_SYNC_POINT_CALLBACK("XXPH3FilterBitsBuilder::Finish::TamperFilter",
                              &TEST_arg_pair);
 
-    Slice rv(mutable_buf.get(), len_with_metadata);
     *buf = std::move(mutable_buf);
+    Slice rv(buf->get(), len_with_metadata);
     final_filter_cache_res_handles_.push_back(
         std::move(final_filter_cache_res_handle));
     if (status) {
@@ -754,8 +754,8 @@ class Standard128RibbonBitsBuilder : public XXPH3FilterBitsBuilder {
     TEST_SYNC_POINT_CALLBACK("XXPH3FilterBitsBuilder::Finish::TamperFilter",
                              &TEST_arg_pair);
 
-    Slice rv(mutable_buf.get(), len_with_metadata);
     *buf = std::move(mutable_buf);
+    Slice rv(buf->get(), len_with_metadata);
     final_filter_cache_res_handles_.push_back(
         std::move(final_filter_cache_res_handle));
     if (status) {

@@ -88,6 +88,7 @@ int AppendHumanMicros(uint64_t micros, char* output, int len,
                       bool fixed_format);
 
 // Append a human-readable size in bytes
+[[clang::annotate("cppsafe::may_discard")]]
 int AppendHumanBytes(uint64_t bytes, char* output, int len);
 
 // Return a human-readable version of "value".

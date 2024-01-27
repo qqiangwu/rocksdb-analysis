@@ -20,6 +20,7 @@
 #include "rocksdb/advanced_cache.h"
 #include "rocksdb/iterator.h"
 #include "rocksdb/options.h"
+#include "rocksdb/rocksdb_namespace.h"
 #include "rocksdb/statistics.h"
 #include "rocksdb/table.h"
 #include "table/block_based/block_prefix_index.h"
@@ -233,6 +234,7 @@ class Block {
   // It is determined by IndexType property of the table.
   // `user_defined_timestamps_persisted` controls whether a min timestamp is
   // padded while key is being parsed from the block.
+  CPPSAFE_POST("return", ":global")
   IndexBlockIter* NewIndexIterator(
       const Comparator* raw_ucmp, SequenceNumber global_seqno,
       IndexBlockIter* iter, Statistics* stats, bool total_order_seek,

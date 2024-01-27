@@ -17,6 +17,7 @@ class Footer;
 // Release the cached entry and decrement its ref count.
 extern void ForceReleaseCachedEntry(void* arg, void* h);
 
+CPPSAFE_SUPPRESS_LIFETIME
 inline MemoryAllocator* GetMemoryAllocator(
     const BlockBasedTableOptions& table_options) {
   return table_options.block_cache.get()

@@ -7,6 +7,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file. See the AUTHORS file for names of contributors.
 
+#include "rocksdb/rocksdb_namespace.h"
 #ifndef OS_WIN
 #include <sys/ioctl.h>
 #endif
@@ -3311,6 +3312,7 @@ class WrappedEnv : public EnvWrapper {
   }
 };
 }  // namespace
+
 TEST_F(CreateEnvTest, CreateMockEnv) {
   ConfigOptions options;
   options.ignore_unsupported_options = false;
@@ -3331,11 +3333,11 @@ TEST_F(CreateEnvTest, CreateMockEnv) {
   ASSERT_TRUE(guard->AreEquivalent(options, copy.get(), &mismatch));
   guard.reset(MockEnv::Create(Env::Default(), SystemClock::Default()));
   opt_str = guard->ToString(options);
-  ASSERT_OK(Env::CreateFromString(options, opt_str, &env, &copy));
+  CPPSAFE_SUPPRESS_LIFETIME ASSERT_OK(Env::CreateFromString(options, opt_str, &env, &copy));
   std::unique_ptr<Env> wrapped_env(new WrappedEnv(Env::Default()));
   guard.reset(MockEnv::Create(wrapped_env.get(), SystemClock::Default()));
   opt_str = guard->ToString(options);
-  ASSERT_OK(Env::CreateFromString(options, opt_str, &env, &copy));
+  CPPSAFE_SUPPRESS_LIFETIME ASSERT_OK(Env::CreateFromString(options, opt_str, &env, &copy));
   opt_str = copy->ToString(options);
 }
 
@@ -3371,7 +3373,7 @@ TEST_F(CreateEnvTest, CreateWrappedEnv) {
       std::make_shared<WrappedEnv>(Env::Default()))));
   ASSERT_NE(guard.get(), env);
   opt_str = guard->ToString(options);
-  ASSERT_OK(Env::CreateFromString(options, opt_str, &env, &copy));
+  CPPSAFE_SUPPRESS_LIFETIME ASSERT_OK(Env::CreateFromString(options, opt_str, &env, &copy));
   ASSERT_NE(copy, guard);
   ASSERT_TRUE(guard->AreEquivalent(options, copy.get(), &mismatch));
 }
@@ -3622,7 +3624,6 @@ TEST_F(TestAsyncRead, ReadAsync) {
 
     // Poll for the submitted requests.
     fs->Poll(io_handles, kNumSectors);
-
     // Check the status of read requests.
     for (size_t i = 0; i < kNumSectors; i++) {
       if (i % 2) {

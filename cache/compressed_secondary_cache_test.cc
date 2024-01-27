@@ -1114,7 +1114,8 @@ TEST_P(CompressedSecCacheTestWithTiered, AdmissionPolicy) {
     return;
   }
 
-  Cache* tiered_cache = GetTieredCache().get();
+  auto cachePtr = GetTieredCache();
+  Cache* tiered_cache = cachePtr.get();
   Cache* cache = GetCache();
   std::vector<CacheKey> keys;
   std::vector<std::string> vals;

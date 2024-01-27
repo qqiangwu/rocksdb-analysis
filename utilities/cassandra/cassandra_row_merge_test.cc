@@ -79,6 +79,7 @@ TEST(RowValueMergeTest, MergeWithRowTombstone) {
 
   // If the tombstone's timestamp is the latest, then it returns a
   // row tombstone.
+  row_values.clear();
   row_values.push_back(CreateRowTombstone(15));
 
   row_values.push_back(CreateRowTombstone(17));

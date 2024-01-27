@@ -11,6 +11,7 @@
 
 #include <algorithm>
 #include <limits>
+#include "rocksdb/rocksdb_namespace.h"
 #ifdef ROCKSDB_MALLOC_USABLE_SIZE
 #ifdef OS_FREEBSD
 #include <malloc_np.h>
@@ -489,7 +490,7 @@ class UncompressionContext {
   }
 };
 
-class UncompressionInfo {
+class [[gsl::Pointer]] UncompressionInfo {
   const UncompressionContext& context_;
   const UncompressionDict& dict_;
   const CompressionType type_;
@@ -760,7 +761,7 @@ inline size_t PutDecompressedSizeInfo(std::string* output, uint32_t length) {
   return output->size();
 }
 
-inline bool GetDecompressedSizeInfo(const char** input_data,
+inline bool GetDecompressedSizeInfo(const char** input_data CPPSAFE_LIFETIME_INOUT,
                                     size_t* input_length,
                                     uint32_t* output_len) {
   auto new_input_data =

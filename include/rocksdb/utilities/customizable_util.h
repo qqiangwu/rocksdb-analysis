@@ -19,6 +19,7 @@
 #include "options/configurable_helper.h"
 #include "rocksdb/convenience.h"
 #include "rocksdb/customizable.h"
+#include "rocksdb/rocksdb_namespace.h"
 #include "rocksdb/status.h"
 #include "rocksdb/utilities/object_registry.h"
 
@@ -308,7 +309,7 @@ static Status NewStaticObject(
 // @param result The newly created instance.
 template <typename T>
 static Status LoadStaticObject(const ConfigOptions& config_options,
-                               const std::string& value, T** result) {
+                               const std::string& value, T** result CPPSAFE_LIFETIME_INOUT) {
   std::string id;
   std::unordered_map<std::string, std::string> opt_map;
   Status status = Customizable::GetOptionsMap(config_options, *result, value,

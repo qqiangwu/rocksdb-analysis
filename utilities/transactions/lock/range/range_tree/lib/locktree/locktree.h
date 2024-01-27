@@ -1,5 +1,6 @@
 /* -*- mode: C++; c-basic-offset: 4; indent-tabs-mode: nil -*- */
 // vim: ft=cpp:expandtab:ts=8:sw=4:softtabstop=4:
+#include "rocksdb/rocksdb_namespace.h"
 #ident "$Id$"
 /*======
 This file is part of PerconaFT.
@@ -189,7 +190,7 @@ class locktree_manager {
   void escalate_all_locktrees(void);
 
   // Escalate a set of locktrees
-  void escalate_locktrees(locktree **locktrees, int num_locktrees);
+  void escalate_locktrees(locktree **locktrees CPPSAFE_LIFETIME_IN, int num_locktrees);
 
   // effect: calls the private function run_escalation(), only ok to
   //         do for tests.

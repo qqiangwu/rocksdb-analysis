@@ -12,6 +12,7 @@
 #include "db/version_builder.h"
 #include "db/version_edit.h"
 #include "db/version_set.h"
+#include "rocksdb/rocksdb_namespace.h"
 
 namespace ROCKSDB_NAMESPACE {
 
@@ -38,7 +39,7 @@ class VersionEditHandlerBase {
   virtual Status Initialize() { return Status::OK(); }
 
   virtual Status ApplyVersionEdit(VersionEdit& edit,
-                                  ColumnFamilyData** cfd) = 0;
+                                  ColumnFamilyData** cfd CPPSAFE_LIFETIME_IN) = 0;
 
   virtual void CheckIterationResult(const log::Reader& /*reader*/,
                                     Status* /*s*/) {}
@@ -241,8 +242,10 @@ class VersionEditHandlerPointInTime : public VersionEditHandler {
   ColumnFamilyData* DestroyCfAndCleanup(const VersionEdit& edit) override;
   Status MaybeCreateVersion(const VersionEdit& edit, ColumnFamilyData* cfd,
                             bool force_create_version) override;
+  CPPSAFE_LIFETIME_CONST
   virtual Status VerifyFile(ColumnFamilyData* cfd, const std::string& fpath,
                             int level, const FileMetaData& fmeta);
+  CPPSAFE_LIFETIME_CONST
   virtual Status VerifyBlobFile(ColumnFamilyData* cfd, uint64_t blob_file_num,
                                 const BlobFileAddition& blob_addition);
 

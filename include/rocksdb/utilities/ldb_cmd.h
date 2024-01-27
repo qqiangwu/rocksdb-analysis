@@ -21,6 +21,7 @@
 #include "rocksdb/iterator.h"
 #include "rocksdb/ldb_tool.h"
 #include "rocksdb/options.h"
+#include "rocksdb/rocksdb_namespace.h"
 #include "rocksdb/slice.h"
 #include "rocksdb/utilities/db_ttl.h"
 #include "rocksdb/utilities/ldb_cmd_execute_result.h"
@@ -313,7 +314,7 @@ class LDBCommandRunner {
 
   // Returns the status code to return. 0 is no error.
   static int RunCommand(
-      int argc, char const* const* argv, Options options,
+      int argc, char const* const* argv CPPSAFE_LIFETIME_IN, Options options,
       const LDBOptions& ldb_options,
       const std::vector<ColumnFamilyDescriptor>* column_families);
 };

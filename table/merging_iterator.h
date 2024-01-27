@@ -33,7 +33,7 @@ using InternalIterator = InternalIteratorBase<Slice>;
 //
 // REQUIRES: n >= 0
 extern InternalIterator* NewMergingIterator(
-    const InternalKeyComparator* comparator, InternalIterator** children, int n,
+    const InternalKeyComparator* comparator, InternalIterator** children CPPSAFE_LIFETIME_IN, int n,
     Arena* arena = nullptr, bool prefix_seek_mode = false);
 
 // The iterator returned by NewMergingIterator() and

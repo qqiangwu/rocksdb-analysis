@@ -32,6 +32,7 @@
 #include "rocksdb/env.h"
 #include "rocksdb/io_status.h"
 #include "rocksdb/options.h"
+#include "rocksdb/rocksdb_namespace.h"
 #include "rocksdb/table.h"
 #include "rocksdb/thread_status.h"
 
@@ -466,6 +467,7 @@ class FileSystem : public Customizable {
     }
     result->resize(child_fnames.size());
     size_t result_size = 0;
+    CPPSAFE_SUPPRESS_LIFETIME
     for (size_t i = 0; i < child_fnames.size(); ++i) {
       const std::string path = dir + "/" + child_fnames[i];
       if (!(s = GetFileSize(path, options, &(*result)[result_size].size_bytes,
@@ -962,10 +964,12 @@ class FSRandomAccessFile {
   // AbortIO API.
   //
   // Default implementation is to read the data synchronously.
+  CPPSAFE_PRE("*del_fn", ":global")
+  CPPSAFE_POST("*del_fn", ":global")
   virtual IOStatus ReadAsync(
       FSReadRequest& req, const IOOptions& opts,
       std::function<void(const FSReadRequest&, void*)> cb, void* cb_arg,
-      void** /*io_handle*/, IOHandleDeleter* /*del_fn*/, IODebugContext* dbg) {
+      void** /*io_handle*/, IOHandleDeleter* del_fn, IODebugContext* dbg) {
     req.status =
         Read(req.offset, req.len, opts, &(req.result), req.scratch, dbg);
     cb(req, cb_arg);
@@ -1612,7 +1616,7 @@ class FileSystemWrapper : public FileSystem {
   std::shared_ptr<FileSystem> target_;
 };
 
-class FSSequentialFileWrapper : public FSSequentialFile {
+class [[gsl::Pointer(FSSequentialFile)]] FSSequentialFileWrapper : public FSSequentialFile {
  public:
   // Creates a FileWrapper around the input File object and without
   // taking ownership of the object
@@ -1656,7 +1660,7 @@ class FSSequentialFileOwnerWrapper : public FSSequentialFileWrapper {
   std::unique_ptr<FSSequentialFile> guard_;
 };
 
-class FSRandomAccessFileWrapper : public FSRandomAccessFile {
+class [[gsl::Pointer(FSRandomAccessFile)]] FSRandomAccessFileWrapper : public FSRandomAccessFile {
  public:
   // Creates a FileWrapper around the input File object and without
   // taking ownership of the object
@@ -1715,7 +1719,7 @@ class FSRandomAccessFileOwnerWrapper : public FSRandomAccessFileWrapper {
   std::unique_ptr<FSRandomAccessFile> guard_;
 };
 
-class FSWritableFileWrapper : public FSWritableFile {
+class [[gsl::Pointer(FSWritableFile)]] FSWritableFileWrapper : public FSWritableFile {
  public:
   // Creates a FileWrapper around the input File object and without
   // taking ownership of the object
@@ -1827,7 +1831,7 @@ class FSWritableFileOwnerWrapper : public FSWritableFileWrapper {
   std::unique_ptr<FSWritableFile> guard_;
 };
 
-class FSRandomRWFileWrapper : public FSRandomRWFile {
+class [[gsl::Pointer(FSRandomRWFile)]] FSRandomRWFileWrapper : public FSRandomRWFile {
  public:
   // Creates a FileWrapper around the input File object and without
   // taking ownership of the object

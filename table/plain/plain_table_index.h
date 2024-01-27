@@ -13,6 +13,7 @@
 #include "monitoring/histogram.h"
 #include "options/cf_options.h"
 #include "rocksdb/options.h"
+#include "rocksdb/rocksdb_namespace.h"
 
 namespace ROCKSDB_NAMESPACE {
 
@@ -61,7 +62,7 @@ namespace ROCKSDB_NAMESPACE {
 // The class loads the index block from a PlainTable SST file, and executes
 // the index lookup.
 // The class is used by PlainTableReader class.
-class PlainTableIndex {
+class [[gsl::Pointer(const char)]] PlainTableIndex {
  public:
   enum IndexSearchResult {
     kNoPrefixForBucket = 0,
@@ -94,6 +95,7 @@ class PlainTableIndex {
   // The return value is the pointer to the starting address of the
   // sub-index. `upper_bound` is filled with the value indicating how many
   // entries the sub-index has.
+  CPPSAFE_POST("return", "*this")
   const char* GetSubIndexBasePtrAndUpperBound(uint32_t offset,
                                               uint32_t* upper_bound) const {
     const char* index_ptr = &sub_index_[offset];

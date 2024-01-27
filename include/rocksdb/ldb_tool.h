@@ -8,6 +8,7 @@
 
 #include "rocksdb/db.h"
 #include "rocksdb/options.h"
+#include "rocksdb/rocksdb_namespace.h"
 
 namespace ROCKSDB_NAMESPACE {
 
@@ -33,7 +34,7 @@ struct LDBOptions {
 class LDBTool {
  public:
   void Run(
-      int argc, char** argv, Options db_options = Options(),
+      int argc, char** argv CPPSAFE_LIFETIME_IN, Options db_options = Options(),
       const LDBOptions& ldb_options = LDBOptions(),
       const std::vector<ColumnFamilyDescriptor>* column_families = nullptr);
 };

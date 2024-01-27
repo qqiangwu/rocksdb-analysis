@@ -9,6 +9,7 @@
 #include <vector>
 
 #include "rocksdb/options.h"
+#include "rocksdb/rocksdb_namespace.h"
 
 namespace ROCKSDB_NAMESPACE {
 class SystemClock;
@@ -109,6 +110,8 @@ struct ImmutableDBOptions {
   bool IsWalDirSameAsDBPath() const;
   bool IsWalDirSameAsDBPath(const std::string& path) const;
   const std::string& GetWalDir() const;
+
+  CPPSAFE_POST("return", "this", "path")
   const std::string& GetWalDir(const std::string& path) const;
 };
 

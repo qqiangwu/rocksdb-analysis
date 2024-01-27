@@ -18,6 +18,7 @@
 #include "rocksdb/listener.h"
 #include "rocksdb/options.h"
 #include "rocksdb/rate_limiter.h"
+#include "rocksdb/rocksdb_namespace.h"
 #include "util/aligned_buffer.h"
 
 namespace ROCKSDB_NAMESPACE {
@@ -164,6 +165,7 @@ class RandomAccessFileReader {
   // 2. Otherwise, scratch is not used and can be null, the aligned_buf owns
   // the internally allocated buffer on return, and the result refers to a
   // region in aligned_buf.
+  CPPSAFE_POST("*result", "scratch", "*aligned_buf")
   IOStatus Read(const IOOptions& opts, uint64_t offset, size_t n, Slice* result,
                 char* scratch, AlignedBuf* aligned_buf) const;
 
@@ -187,6 +189,7 @@ class RandomAccessFileReader {
 
   IOStatus PrepareIOOptions(const ReadOptions& ro, IOOptions& opts) const;
 
+  CPPSAFE_PRE("*del_fn", ":global")
   IOStatus ReadAsync(FSReadRequest& req, const IOOptions& opts,
                      std::function<void(const FSReadRequest&, void*)> cb,
                      void* cb_arg, void** io_handle, IOHandleDeleter* del_fn,

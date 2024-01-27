@@ -4,12 +4,13 @@
 //  COPYING file in the root directory) and Apache 2.0 License
 //  (found in the LICENSE.Apache file in the root directory).
 #include "table/compaction_merging_iterator.h"
+#include "rocksdb/rocksdb_namespace.h"
 
 namespace ROCKSDB_NAMESPACE {
 class CompactionMergingIterator : public InternalIterator {
  public:
   CompactionMergingIterator(
-      const InternalKeyComparator* comparator, InternalIterator** children,
+      const InternalKeyComparator* comparator, InternalIterator** children CPPSAFE_LIFETIME_IN,
       int n, bool is_arena_mode,
       std::vector<
           std::pair<TruncatedRangeDelIterator*, TruncatedRangeDelIterator***>>

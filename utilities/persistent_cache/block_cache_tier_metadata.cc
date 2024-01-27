@@ -6,6 +6,7 @@
 #include "utilities/persistent_cache/block_cache_tier_metadata.h"
 
 #include <functional>
+#include "rocksdb/rocksdb_namespace.h"
 
 namespace ROCKSDB_NAMESPACE {
 
@@ -40,6 +41,7 @@ BlockInfo* BlockCacheTierMetadata::Insert(const Slice& key, const LBA& lba) {
   if (!block_index_.Insert(binfo.get())) {
     return nullptr;
   }
+  CPPSAFE_SUPPRESS_LIFETIME
   return binfo.release();
 }
 
@@ -65,6 +67,7 @@ BlockInfo* BlockCacheTierMetadata::Remove(const Slice& key) {
   bool ok __attribute__((__unused__));
   ok = block_index_.Erase(&lookup_key, &binfo);
   assert(ok);
+  CPPSAFE_SUPPRESS_LIFETIME
   return binfo;
 }
 

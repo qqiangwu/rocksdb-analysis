@@ -60,7 +60,7 @@ class Comparator : public Customizable, public CompareInterface {
 
   static Status CreateFromString(const ConfigOptions& opts,
                                  const std::string& id,
-                                 const Comparator** comp);
+                                 const Comparator** comp CPPSAFE_LIFETIME_INOUT);
   static const char* Type() { return "Comparator"; }
 
   // The name of the comparator.  Used to check for comparator

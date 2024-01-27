@@ -249,6 +249,7 @@ static inline uint32_t LE_LOAD32(const uint8_t* p) {
 }
 #endif  // !__SSE4_2__
 
+CPPSAFE_SUPPRESS_LIFETIME
 static inline void DefaultCRC32(uint64_t* l, uint8_t const** p) {
 #ifndef __SSE4_2__
   uint32_t c = static_cast<uint32_t>(*l ^ LE_LOAD32(*p));

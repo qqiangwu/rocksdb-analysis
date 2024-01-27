@@ -20,6 +20,7 @@
 #include "db/range_tombstone_fragmenter.h"
 #include "db/version_edit.h"
 #include "rocksdb/comparator.h"
+#include "rocksdb/rocksdb_namespace.h"
 #include "rocksdb/types.h"
 #include "table/internal_iterator.h"
 #include "table/scoped_arena_iterator.h"

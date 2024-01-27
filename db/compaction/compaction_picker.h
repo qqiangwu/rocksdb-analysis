@@ -20,6 +20,7 @@
 #include "options/cf_options.h"
 #include "rocksdb/env.h"
 #include "rocksdb/options.h"
+#include "rocksdb/rocksdb_namespace.h"
 #include "rocksdb/status.h"
 
 namespace ROCKSDB_NAMESPACE {
@@ -78,7 +79,7 @@ class CompactionPicker {
       int input_level, int output_level,
       const CompactRangeOptions& compact_range_options,
       const InternalKey* begin, const InternalKey* end,
-      InternalKey** compaction_end, bool* manual_conflict,
+      InternalKey** compaction_end CPPSAFE_LIFETIME_INOUT, bool* manual_conflict,
       uint64_t max_file_num_to_ignore, const std::string& trim_ts);
 
   // The maximum allowed output level.  Default value is NumberLevels() - 1.
@@ -169,10 +170,11 @@ class CompactionPicker {
   // populated.
   //
   // Will return false if it is impossible to apply this compaction.
+  CPPSAFE_POST("*next_smallest", "vstorage", "*next_smallest")
   bool ExpandInputsToCleanCut(const std::string& cf_name,
                               VersionStorageInfo* vstorage,
                               CompactionInputFiles* inputs,
-                              InternalKey** next_smallest = nullptr);
+                              InternalKey** next_smallest CPPSAFE_LIFETIME_IN = nullptr);
 
   // Returns true if any one of the parent files are being compacted
   bool IsRangeInCompaction(VersionStorageInfo* vstorage,

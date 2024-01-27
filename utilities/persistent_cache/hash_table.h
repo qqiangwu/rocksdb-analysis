@@ -10,6 +10,7 @@
 
 #include <list>
 #include <vector>
+#include "rocksdb/rocksdb_namespace.h"
 
 #ifdef OS_LINUX
 #include <sys/mman.h>
@@ -62,7 +63,7 @@ namespace ROCKSDB_NAMESPACE {
 //        (We need explicit equal for pointer type)
 //
 template <class T, class Hash, class Equal>
-class HashTable {
+class [[gsl::Owner(T)]] HashTable {
  public:
   explicit HashTable(const size_t capacity = 1024 * 1024,
                      const float load_factor = 2.0, const uint32_t nlocks = 256)
@@ -193,6 +194,7 @@ class HashTable {
     return true;
   }
 
+  CPPSAFE_POST("ret", "*this")
   bool Find(Bucket* bucket, const T& t, T* ret) {
     auto it = Find(&bucket->list_, t);
     if (it != bucket->list_.end()) {

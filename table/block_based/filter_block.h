@@ -21,6 +21,7 @@
 #include <vector>
 
 #include "rocksdb/options.h"
+#include "rocksdb/rocksdb_namespace.h"
 #include "rocksdb/slice.h"
 #include "rocksdb/slice_transform.h"
 #include "rocksdb/table.h"
@@ -68,6 +69,7 @@ class FilterBlockBuilder {
   // underlying filter data to the caller,  so that it can be freed as soon as
   // possible. BlockBasedFilterBlock will ignore this parameter.
   //
+  CPPSAFE_POST("return", "this", "*filter_data")
   virtual Slice Finish(
       const BlockHandle& tmp /* only used in PartitionedFilterBlock as
                                 last_partition_block_handle */

@@ -198,8 +198,8 @@ IOStatus RandomAccessFileReader::Read(const IOOptions& opts, uint64_t offset,
         if (aligned_buf == nullptr) {
           buf.Read(scratch, offset_advance, res_len);
         } else {
-          scratch = buf.BufferStart() + offset_advance;
           aligned_buf->reset(buf.Release());
+          scratch = aligned_buf->get() + offset_advance;
         }
       }
       *result = Slice(scratch, res_len);

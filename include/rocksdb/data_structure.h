@@ -23,7 +23,7 @@ int CountTrailingZeroBitsForSmallEnumSet(uint64_t);
 // possible enumerators. For now, it supports enums where no enumerator
 // exceeds 63 when converted to int.
 template <typename ENUM_TYPE, ENUM_TYPE MAX_ENUMERATOR>
-class SmallEnumSet {
+class [[gsl::Owner(ENUM_TYPE)]] SmallEnumSet {
  private:
   using StateT = uint64_t;
   static constexpr int kStateBits = sizeof(StateT) * 8;

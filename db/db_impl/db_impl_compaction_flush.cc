@@ -22,6 +22,7 @@
 #include "rocksdb/file_system.h"
 #include "rocksdb/io_status.h"
 #include "rocksdb/options.h"
+#include "rocksdb/rocksdb_namespace.h"
 #include "rocksdb/table.h"
 #include "test_util/sync_point.h"
 #include "util/cast_util.h"
@@ -2336,6 +2337,7 @@ Status DBImpl::FlushMemTable(ColumnFamilyData* cfd,
               stats_cf_flush_needed = false;
             }
           }
+          CPPSAFE_SUPPRESS_LIFETIME
           if (stats_cf_flush_needed) {
             ROCKS_LOG_INFO(immutable_db_options_.info_log,
                            "Force flushing stats CF with manual flush of %s "
@@ -2950,6 +2952,7 @@ ColumnFamilyData* DBImpl::PopFirstFromCompactionQueue() {
 DBImpl::FlushRequest DBImpl::PopFirstFromFlushQueue() {
   assert(!flush_queue_.empty());
   FlushRequest flush_req = std::move(flush_queue_.front());
+  CPPSAFE_SUPPRESS_LIFETIME
   flush_queue_.pop_front();
   if (!immutable_db_options_.atomic_flush) {
     assert(flush_req.cfd_to_max_mem_id_to_persist.size() == 1);
@@ -3517,11 +3520,13 @@ Status DBImpl::BackgroundCompaction(bool* made_progress,
   bool is_prepicked = is_manual || c;
 
   // (manual_compaction->in_progress == false);
+  CPPSAFE_SUPPRESS_LIFETIME
   bool trivial_move_disallowed =
-      is_manual && manual_compaction->disallow_trivial_move;
+      is_manual;// && manual_compaction->disallow_trivial_move;
 
   CompactionJobStats compaction_job_stats;
   Status status;
+  CPPSAFE_SUPPRESS_LIFETIME
   if (!error_handler_.IsBGWorkStopped()) {
     if (shutting_down_.load(std::memory_order_acquire)) {
       status = Status::ShutdownInProgress();
@@ -3554,6 +3559,7 @@ Status DBImpl::BackgroundCompaction(bool* made_progress,
 
   if (is_manual) {
     // another thread cannot pick up the same work
+    assert(manual_compaction);
     manual_compaction->in_progress = true;
   }
 
@@ -3563,6 +3569,7 @@ Status DBImpl::BackgroundCompaction(bool* made_progress,
 
   bool sfm_reserved_compact_space = false;
   if (is_manual) {
+    assert(manual_compaction);
     ManualCompactionState* m = manual_compaction;
     assert(m->in_progress);
     if (!c) {

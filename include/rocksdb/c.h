@@ -44,6 +44,7 @@
 
 #pragma once
 
+#include "rocksdb/rocksdb_namespace.h"
 #ifdef _WIN32
 #ifdef ROCKSDB_DLL
 #ifdef ROCKSDB_LIBRARY_EXPORTS
@@ -599,7 +600,7 @@ extern ROCKSDB_LIBRARY_API rocksdb_iterator_t* rocksdb_create_iterator_cf(
 
 extern ROCKSDB_LIBRARY_API void rocksdb_create_iterators(
     rocksdb_t* db, rocksdb_readoptions_t* opts,
-    rocksdb_column_family_handle_t** column_families,
+    rocksdb_column_family_handle_t** column_families CPPSAFE_LIFETIME_IN,
     rocksdb_iterator_t** iterators, size_t size, char** errptr);
 
 extern ROCKSDB_LIBRARY_API const rocksdb_snapshot_t* rocksdb_create_snapshot(
@@ -681,7 +682,7 @@ extern ROCKSDB_LIBRARY_API void rocksdb_flush_cf(
 
 extern ROCKSDB_LIBRARY_API void rocksdb_flush_cfs(
     rocksdb_t* db, const rocksdb_flushoptions_t* options,
-    rocksdb_column_family_handle_t** column_family, int num_column_families,
+    rocksdb_column_family_handle_t** column_family CPPSAFE_LIFETIME_IN, int num_column_families,
     char** errptr);
 
 extern ROCKSDB_LIBRARY_API void rocksdb_flush_wal(rocksdb_t* db,
@@ -831,8 +832,9 @@ extern ROCKSDB_LIBRARY_API void rocksdb_writebatch_iterate(
     rocksdb_writebatch_t*, void* state,
     void (*put)(void*, const char* k, size_t klen, const char* v, size_t vlen),
     void (*deleted)(void*, const char* k, size_t klen));
+[[clang::annotate("gsl::lifetime_post", "return", "b")]]
 extern ROCKSDB_LIBRARY_API const char* rocksdb_writebatch_data(
-    rocksdb_writebatch_t*, size_t* size);
+    rocksdb_writebatch_t* b, size_t* size);
 extern ROCKSDB_LIBRARY_API void rocksdb_writebatch_set_save_point(
     rocksdb_writebatch_t*);
 extern ROCKSDB_LIBRARY_API void rocksdb_writebatch_rollback_to_save_point(
@@ -978,7 +980,7 @@ extern ROCKSDB_LIBRARY_API void rocksdb_load_latest_options(
 
 extern ROCKSDB_LIBRARY_API void rocksdb_load_latest_options_destroy(
     rocksdb_options_t* db_options, char** list_column_family_names,
-    rocksdb_options_t** list_column_family_options, size_t len);
+    rocksdb_options_t** list_column_family_options CPPSAFE_LIFETIME_IN, size_t len);
 
 /* Block based table options */
 
@@ -1145,9 +1147,9 @@ extern ROCKSDB_LIBRARY_API void rocksdb_options_set_paranoid_checks(
 extern ROCKSDB_LIBRARY_API unsigned char rocksdb_options_get_paranoid_checks(
     rocksdb_options_t*);
 extern ROCKSDB_LIBRARY_API void rocksdb_options_set_db_paths(
-    rocksdb_options_t*, const rocksdb_dbpath_t** path_values, size_t num_paths);
+    rocksdb_options_t*, const rocksdb_dbpath_t** path_values CPPSAFE_LIFETIME_IN, size_t num_paths);
 extern ROCKSDB_LIBRARY_API void rocksdb_options_set_cf_paths(
-    rocksdb_options_t*, const rocksdb_dbpath_t** path_values, size_t num_paths);
+    rocksdb_options_t*, const rocksdb_dbpath_t** path_values CPPSAFE_LIFETIME_IN, size_t num_paths);
 extern ROCKSDB_LIBRARY_API void rocksdb_options_set_env(rocksdb_options_t*,
                                                         rocksdb_env_t*);
 extern ROCKSDB_LIBRARY_API void rocksdb_options_set_info_log(rocksdb_options_t*,
@@ -2346,18 +2348,22 @@ extern ROCKSDB_LIBRARY_API void rocksdb_fifo_compaction_options_destroy(
 
 extern ROCKSDB_LIBRARY_API int rocksdb_livefiles_count(
     const rocksdb_livefiles_t*);
+[[clang::annotate("gsl::lifetime_post", "return", "*l")]]
 extern ROCKSDB_LIBRARY_API const char* rocksdb_livefiles_column_family_name(
-    const rocksdb_livefiles_t*, int index);
+    const rocksdb_livefiles_t* l, int index);
+[[clang::annotate("gsl::lifetime_post", "return", "*l")]]
 extern ROCKSDB_LIBRARY_API const char* rocksdb_livefiles_name(
-    const rocksdb_livefiles_t*, int index);
+    const rocksdb_livefiles_t* l, int index);
 extern ROCKSDB_LIBRARY_API int rocksdb_livefiles_level(
     const rocksdb_livefiles_t*, int index);
 extern ROCKSDB_LIBRARY_API size_t
 rocksdb_livefiles_size(const rocksdb_livefiles_t*, int index);
+[[clang::annotate("gsl::lifetime_post", "return", "*l")]]
 extern ROCKSDB_LIBRARY_API const char* rocksdb_livefiles_smallestkey(
-    const rocksdb_livefiles_t*, int index, size_t* size);
+    const rocksdb_livefiles_t* l, int index, size_t* size);
+[[clang::annotate("gsl::lifetime_post", "return", "*l")]]
 extern ROCKSDB_LIBRARY_API const char* rocksdb_livefiles_largestkey(
-    const rocksdb_livefiles_t*, int index, size_t* size);
+    const rocksdb_livefiles_t* l, int index, size_t* size);
 extern ROCKSDB_LIBRARY_API uint64_t
 rocksdb_livefiles_entries(const rocksdb_livefiles_t*, int index);
 extern ROCKSDB_LIBRARY_API uint64_t
@@ -2784,7 +2790,7 @@ extern ROCKSDB_LIBRARY_API void rocksdb_transactiondb_flush_cf(
 
 extern ROCKSDB_LIBRARY_API void rocksdb_transactiondb_flush_cfs(
     rocksdb_transactiondb_t* txn_db, const rocksdb_flushoptions_t* options,
-    rocksdb_column_family_handle_t** column_families, int num_column_families,
+    rocksdb_column_family_handle_t** column_families CPPSAFE_LIFETIME_IN, int num_column_families,
     char** errptr);
 
 extern ROCKSDB_LIBRARY_API void rocksdb_transactiondb_flush_wal(

@@ -20,6 +20,7 @@
 #include "rocksdb/env.h"
 #include "rocksdb/file_system.h"
 #include "rocksdb/options.h"
+#include "rocksdb/rocksdb_namespace.h"
 #include "util/aligned_buffer.h"
 #include "util/autovector.h"
 #include "util/stop_watch.h"
@@ -378,23 +379,28 @@ class FilePrefetchBuffer {
             offset + length <=
                 bufs_[index].offset_ + bufs_[index].buffer_.CurrentSize());
   }
+
   bool IsOffsetInBuffer(uint64_t offset, uint32_t index) {
     return (offset >= bufs_[index].offset_ &&
             offset < bufs_[index].offset_ + bufs_[index].buffer_.CurrentSize());
   }
+
   bool DoesBufferContainData(uint32_t index) {
     return bufs_[index].buffer_.CurrentSize() > 0;
   }
+
   bool IsBufferOutdated(uint64_t offset, uint32_t index) {
     return (
         !bufs_[index].async_read_in_progress_ && DoesBufferContainData(index) &&
         offset >= bufs_[index].offset_ + bufs_[index].buffer_.CurrentSize());
   }
+
   bool IsBufferOutdatedWithAsyncProgress(uint64_t offset, uint32_t index) {
     return (bufs_[index].async_read_in_progress_ &&
             bufs_[index].io_handle_ != nullptr &&
             offset >= bufs_[index].offset_ + bufs_[index].async_req_len_);
   }
+
   bool IsOffsetInBufferWithAsyncProgress(uint64_t offset, uint32_t index) {
     return (bufs_[index].async_read_in_progress_ &&
             offset >= bufs_[index].offset_ &&

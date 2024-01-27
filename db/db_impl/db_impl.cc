@@ -9,6 +9,7 @@
 #include "db/db_impl/db_impl.h"
 
 #include <stdint.h>
+#include "rocksdb/rocksdb_namespace.h"
 #ifdef OS_SOLARIS
 #include <alloca.h>
 #endif
@@ -460,6 +461,7 @@ Status DBImpl::ResumeImpl(DBRecoverContext context) {
   }
 
   if (s.ok()) {
+    CPPSAFE_SUPPRESS_LIFETIME
     for (auto cfd : *versions_->GetColumnFamilySet()) {
       SchedulePendingCompaction(cfd);
     }

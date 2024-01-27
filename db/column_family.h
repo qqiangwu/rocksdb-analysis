@@ -25,6 +25,7 @@
 #include "rocksdb/db.h"
 #include "rocksdb/env.h"
 #include "rocksdb/options.h"
+#include "rocksdb/rocksdb_namespace.h"
 #include "trace_replay/block_cache_tracer.h"
 #include "util/hash_containers.h"
 #include "util/thread_local.h"
@@ -221,6 +222,7 @@ struct SuperVersion {
   // should be called outside the mutex
   SuperVersion() = default;
   ~SuperVersion();
+  [[clang::annotate("cppsafe::may_discard")]]
   SuperVersion* Ref();
   // If Unref() returns true, Cleanup() should be called with mutex held
   // before deleting this SuperVersion.
@@ -289,6 +291,7 @@ class ColumnFamilyData {
   // UnrefAndTryDelete() decreases the reference count and do free if needed,
   // return true if this is freed else false, UnrefAndTryDelete() can only
   // be called while holding a DB mutex, or during single-threaded recovery.
+  [[clang::annotate("cppsafe::may_discard")]]
   bool UnrefAndTryDelete();
 
   // SetDropped() can only be called under following conditions:
@@ -416,7 +419,7 @@ class ColumnFamilyData {
                            int input_level, int output_level,
                            const CompactRangeOptions& compact_range_options,
                            const InternalKey* begin, const InternalKey* end,
-                           InternalKey** compaction_end, bool* manual_conflict,
+                           InternalKey** compaction_end CPPSAFE_LIFETIME_IN, bool* manual_conflict,
                            uint64_t max_file_num_to_ignore,
                            const std::string& trim_ts);
 

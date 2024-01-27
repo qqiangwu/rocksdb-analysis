@@ -18,6 +18,7 @@
 #include "rocksdb/env.h"
 #include "rocksdb/filter_policy.h"
 #include "rocksdb/options.h"
+#include "rocksdb/rocksdb_namespace.h"
 #include "rocksdb/statistics.h"
 #include "table/block_based/block.h"
 #include "table/block_based/filter_block.h"
@@ -258,7 +259,6 @@ Status PlainTableReader::PopulateIndexRecordList(
 
     is_first_record = false;
   }
-
   prefix_hashes->push_back(GetSliceHash(key_prefix_slice));
   auto s = index_.InitFromRawData(index_builder->Finish());
   return s;

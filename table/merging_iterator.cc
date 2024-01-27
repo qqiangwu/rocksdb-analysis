@@ -10,6 +10,7 @@
 #include "table/merging_iterator.h"
 
 #include "db/arena_wrapped_db_iter.h"
+#include "rocksdb/rocksdb_namespace.h"
 
 namespace ROCKSDB_NAMESPACE {
 // MergingIterator uses a min/max heap to combine data from point iterators.
@@ -52,7 +53,7 @@ namespace ROCKSDB_NAMESPACE {
 class MergingIterator : public InternalIterator {
  public:
   MergingIterator(const InternalKeyComparator* comparator,
-                  InternalIterator** children, int n, bool is_arena_mode,
+                  InternalIterator** children CPPSAFE_LIFETIME_IN, int n, bool is_arena_mode,
                   bool prefix_seek_mode,
                   const Slice* iterate_upper_bound = nullptr)
       : is_arena_mode_(is_arena_mode),

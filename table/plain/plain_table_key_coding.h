@@ -8,6 +8,7 @@
 
 #include <array>
 
+#include "rocksdb/rocksdb_namespace.h"
 #include "rocksdb/slice.h"
 #include "table/plain/plain_table_reader.h"
 
@@ -161,10 +162,13 @@ class PlainTableKeyDecoder {
   // bytes_read: how many bytes read from start. Output
   // seekable: whether key can be read from this place. Used when building
   //           indexes. Output.
+  CPPSAFE_POST("*internal_key", "*internal_key", "this")
+  CPPSAFE_POST("*value", "*value", "this")
   Status NextKey(uint32_t start_offset, ParsedInternalKey* parsed_key,
                  Slice* internal_key, Slice* value, uint32_t* bytes_read,
                  bool* seekable = nullptr);
 
+  CPPSAFE_POST("*internal_key", "*internal_key", "this")
   Status NextKeyNoValue(uint32_t start_offset, ParsedInternalKey* parsed_key,
                         Slice* internal_key, uint32_t* bytes_read,
                         bool* seekable = nullptr);
@@ -179,14 +183,17 @@ class PlainTableKeyDecoder {
   bool in_prefix_;
 
  private:
+  CPPSAFE_POST("*internal_key", "*internal_key", "this")
   Status NextPlainEncodingKey(uint32_t start_offset,
                               ParsedInternalKey* parsed_key,
                               Slice* internal_key, uint32_t* bytes_read,
                               bool* seekable = nullptr);
+  CPPSAFE_POST("*internal_key", "*internal_key", "this")
   Status NextPrefixEncodingKey(uint32_t start_offset,
                                ParsedInternalKey* parsed_key,
                                Slice* internal_key, uint32_t* bytes_read,
                                bool* seekable = nullptr);
+  CPPSAFE_POST("*internal_key", "*internal_key", "this")
   Status ReadInternalKey(uint32_t file_offset, uint32_t user_key_size,
                          ParsedInternalKey* parsed_key, uint32_t* bytes_read,
                          bool* internal_key_valid, Slice* internal_key);

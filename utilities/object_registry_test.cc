@@ -8,6 +8,7 @@
 
 #include "rocksdb/convenience.h"
 #include "rocksdb/customizable.h"
+#include "rocksdb/rocksdb_namespace.h"
 #include "test_util/testharness.h"
 
 namespace ROCKSDB_NAMESPACE {
@@ -84,7 +85,7 @@ TEST_F(ObjRegistryTest, Basics) {
 
   b_env = guard.get();
   ASSERT_NOK(registry->NewUniqueObject<Env>("a://test", &guard));
-  ASSERT_EQ(guard.get(), b_env);  // Unchanged
+  CPPSAFE_SUPPRESS_LIFETIME ASSERT_EQ(guard.get(), b_env);  // Unchanged
   ASSERT_EQ(2, num_a);            // Created one but rejected it as not unique
   ASSERT_EQ(3, num_b);
 }

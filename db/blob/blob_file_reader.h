@@ -85,6 +85,7 @@ class BlobFileReader {
 
   using Buffer = std::unique_ptr<char[]>;
 
+  CPPSAFE_POST("*slice", "*slice", "*buf", "*aligned_buf")
   static Status ReadFromFile(const RandomAccessFileReader* file_reader,
                              const ReadOptions& read_options,
                              uint64_t read_offset, size_t read_size,

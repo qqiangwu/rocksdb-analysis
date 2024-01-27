@@ -786,6 +786,8 @@ TEST_F(CorruptionTest, FileSystemStateCorrupted) {
     options.paranoid_checks = true;
     options.create_if_missing = true;
     Reopen(&options);
+    assert(db_);
+
     Build(10);
     ASSERT_OK(db_->Flush(FlushOptions()));
     DBImpl* dbi = static_cast_with_check<DBImpl>(db_);

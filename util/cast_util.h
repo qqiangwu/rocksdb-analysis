@@ -17,6 +17,7 @@ namespace ROCKSDB_NAMESPACE {
 // It is not recommended to add new code to issue class casting. The preferred
 // solution is to implement the functionality without a need of casting.
 template <class DestClass, class SrcClass>
+CPPSAFE_POST(Return, "x")
 inline DestClass* static_cast_with_check(SrcClass* x) {
   DestClass* ret = static_cast<DestClass*>(x);
 #ifdef ROCKSDB_USE_RTTI

@@ -65,7 +65,8 @@ class SaveAndRestore {
       : obj_(obj), saved_(std::move(*obj)) {
     *obj = new_value;
   }
-  SaveAndRestore(T* obj, T&& new_value) : obj_(obj), saved_(std::move(*obj)) {
+  CPPSAFE_POST("*obj", "*new_value")
+  SaveAndRestore(CPPSAFE_LIFETIME_INOUT T* obj, T&& new_value) : obj_(obj), saved_(std::move(*obj)) {
     *obj = std::move(new_value);
   }
   ~SaveAndRestore() { *obj_ = std::move(saved_); }

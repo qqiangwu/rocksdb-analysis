@@ -207,7 +207,7 @@ struct LRUHandle {
 // table implementations in some of the compiler/runtime combinations
 // we have tested.  E.g., readrandom speeds up by ~5% over the g++
 // 4.4.3's builtin hashtable.
-class LRUHandleTable {
+class [[gsl::Owner(LRUHandle*)]] LRUHandleTable {
  public:
   explicit LRUHandleTable(int max_upper_hash_bits, MemoryAllocator* allocator);
   ~LRUHandleTable();

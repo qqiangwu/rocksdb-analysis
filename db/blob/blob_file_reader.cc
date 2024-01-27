@@ -15,6 +15,7 @@
 #include "monitoring/statistics_impl.h"
 #include "options/cf_options.h"
 #include "rocksdb/file_system.h"
+#include "rocksdb/rocksdb_namespace.h"
 #include "rocksdb/slice.h"
 #include "rocksdb/status.h"
 #include "table/multiget_context.h"

@@ -48,6 +48,7 @@
 #include "db/version_edit.h"
 #include "db/write_controller.h"
 #include "env/file_system_tracer.h"
+#include "rocksdb/rocksdb_namespace.h"
 #if USE_COROUTINES
 #include "folly/experimental/coro/BlockingWait.h"
 #include "folly/experimental/coro/Collect.h"
@@ -268,7 +269,7 @@ class VersionStorageInfo {
       bool expand_range = true,   // if set, returns files which overlap the
                                   // range and overlap each other. If false,
                                   // then just files intersecting the range
-      InternalKey** next_smallest = nullptr)  // if non-null, returns the
+      InternalKey** next_smallest CPPSAFE_LIFETIME_IN = nullptr)  // if non-null, returns the
       const;  // smallest key of next file not included
   void GetCleanInputsWithinInterval(
       int level, const InternalKey* begin,  // nullptr means before all keys
@@ -286,7 +287,7 @@ class VersionStorageInfo {
       int hint_index,                // index of overlap file
       int* file_index,               // return index of overlap file
       bool within_interval = false,  // if set, force the inputs within interval
-      InternalKey** next_smallest = nullptr)  // if non-null, returns the
+      InternalKey** next_smallest CPPSAFE_LIFETIME_IN = nullptr)  // if non-null, returns the
       const;  // smallest key of next file not included
 
   // Returns true iff some file in the specified level overlaps
@@ -941,6 +942,7 @@ class Version {
   void Ref();
   // Decrease reference count. Delete the object if no reference left
   // and return true. Otherwise, return false.
+  [[clang::annotate("cppsafe::may_discard")]]
   bool Unref();
 
   // Add all files listed in the current version to *live_table_files and
@@ -1113,7 +1115,7 @@ class Version {
   std::shared_ptr<IOTracer> io_tracer_;
   bool use_async_io_;
 
-  Version(ColumnFamilyData* cfd, VersionSet* vset, const FileOptions& file_opt,
+  Version(ColumnFamilyData* cfd, VersionSet* vset CPPSAFE_LIFETIME_CONST, const FileOptions& file_opt,
           MutableCFOptions mutable_cf_options,
           const std::shared_ptr<IOTracer>& io_tracer,
           uint64_t version_number = 0,
@@ -1499,6 +1501,7 @@ class VersionSet {
   // REQUIRES: DB mutex held
   uint64_t GetObsoleteSstFilesSize() const;
 
+  CPPSAFE_LIFETIME_CONST
   ColumnFamilySet* GetColumnFamilySet() { return column_family_set_.get(); }
 
   const UnorderedMap<uint32_t, size_t>& GetRunningColumnFamiliesTimestampSize()
@@ -1604,6 +1607,7 @@ class VersionSet {
       const std::unordered_map<uint32_t, MutableCFState>& curr_state,
       const VersionEdit& wal_additions, log::Writer* log, IOStatus& io_s);
 
+  CPPSAFE_LIFETIME_CONST
   void AppendVersion(ColumnFamilyData* column_family_data, Version* v);
 
   ColumnFamilyData* CreateColumnFamily(const ColumnFamilyOptions& cf_options,

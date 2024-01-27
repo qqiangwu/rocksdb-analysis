@@ -1735,7 +1735,8 @@ TEST_P(BlockBasedTableTest, BasicBlockBasedTableProperties) {
   ASSERT_EQ(
       options.statistics->getTickerCount(NUMBER_BLOCK_COMPRESSION_REJECTED), 0);
 
-  auto& props = *c.GetTableReader()->GetTableProperties();
+  auto ptr = c.GetTableReader()->GetTableProperties();
+  auto& props = *ptr;
   ASSERT_EQ(kvmap.size(), props.num_entries);
 
   auto raw_key_size = kvmap.size() * 2ul;
@@ -1809,7 +1810,8 @@ TEST_P(BlockBasedTableTest, BlockBasedTableProperties2) {
     c.Finish(options, ioptions, moptions, table_options,
              GetPlainInternalComparator(options.comparator), &keys, &kvmap);
 
-    auto& props = *c.GetTableReader()->GetTableProperties();
+    auto ptr = c.GetTableReader()->GetTableProperties();
+    auto& props = *ptr;
 
     // Default comparator
     ASSERT_EQ("leveldb.BytewiseComparator", props.comparator_name);
@@ -1842,8 +1844,8 @@ TEST_P(BlockBasedTableTest, BlockBasedTableProperties2) {
     const MutableCFOptions moptions(options);
     c.Finish(options, ioptions, moptions, table_options,
              GetPlainInternalComparator(options.comparator), &keys, &kvmap);
-
-    auto& props = *c.GetTableReader()->GetTableProperties();
+    auto ptr = c.GetTableReader()->GetTableProperties();
+    auto& props = *ptr;
 
     ASSERT_EQ("rocksdb.ReverseBytewiseComparator", props.comparator_name);
     ASSERT_EQ("UInt64AddOperator", props.merge_operator_name);
@@ -1930,7 +1932,8 @@ TEST_P(BlockBasedTableTest, FilterPolicyNameProperties) {
   const MutableCFOptions moptions(options);
   c.Finish(options, ioptions, moptions, table_options,
            GetPlainInternalComparator(options.comparator), &keys, &kvmap);
-  auto& props = *c.GetTableReader()->GetTableProperties();
+  auto ptr = c.GetTableReader()->GetTableProperties();
+  auto& props = *ptr;
   ASSERT_EQ(table_options.filter_policy->Name(), props.filter_policy_name);
   c.ResetTableReader();
 }

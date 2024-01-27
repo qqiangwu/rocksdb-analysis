@@ -29,6 +29,7 @@
 #include "rocksdb/options.h"
 #include "rocksdb/perf_context.h"
 #include "rocksdb/rate_limiter.h"
+#include "rocksdb/rocksdb_namespace.h"
 #include "rocksdb/slice_transform.h"
 #include "rocksdb/statistics.h"
 #include "rocksdb/status.h"
@@ -543,6 +544,7 @@ static bool SaveError(char** errptr, const Status& s) {
   return true;
 }
 
+CPPSAFE_POST("return", ":global")
 static char* CopyString(const std::string& str) {
   char* result = reinterpret_cast<char*>(malloc(sizeof(char) * str.size()));
   memcpy(result, str.data(), sizeof(char) * str.size());

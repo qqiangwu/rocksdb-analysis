@@ -394,6 +394,7 @@ Status GenericRateLimiter::TuneLocked() {
   return Status::OK();
 }
 
+CPPSAFE_SUPPRESS_LIFETIME
 RateLimiter* NewGenericRateLimiter(
     int64_t rate_bytes_per_sec, int64_t refill_period_us /* = 100 * 1000 */,
     int32_t fairness /* = 10 */,

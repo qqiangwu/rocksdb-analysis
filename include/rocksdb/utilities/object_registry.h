@@ -15,6 +15,7 @@
 #include <unordered_set>
 #include <vector>
 
+#include "rocksdb/rocksdb_namespace.h"
 #include "rocksdb/status.h"
 
 namespace ROCKSDB_NAMESPACE {

@@ -231,6 +231,7 @@ TEST_F(BlockCacheTracerTest, ConsecutiveStartTrace) {
   ASSERT_NE(block_cache_trace_writer, nullptr);
   BlockCacheTracer writer;
   ASSERT_OK(writer.StartTrace(trace_opt, std::move(block_cache_trace_writer)));
+  block_cache_trace_writer.reset();
   ASSERT_NOK(writer.StartTrace(trace_opt, std::move(block_cache_trace_writer)));
   ASSERT_OK(env_->FileExists(trace_file_path_));
 }

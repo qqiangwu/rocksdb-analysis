@@ -33,6 +33,7 @@
 #include <vector>
 
 #include "port/port.h"
+#include "rocksdb/rocksdb_namespace.h"
 #include "test_util/sync_point.h"
 
 // Allows execution of handlers at a specified time in the future

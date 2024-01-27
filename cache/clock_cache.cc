@@ -30,6 +30,7 @@
 #include "monitoring/statistics_impl.h"
 #include "port/lang.h"
 #include "rocksdb/env.h"
+#include "rocksdb/rocksdb_namespace.h"
 #include "util/hash.h"
 #include "util/math.h"
 #include "util/random.h"
@@ -3309,6 +3310,7 @@ AutoHyperClockTable::HandleImpl* AutoHyperClockTable::Lookup(
 }
 
 void AutoHyperClockTable::Remove(HandleImpl* h) {
+  assert(h != nullptr);
   assert((h->meta.Load() >> ClockHandle::kStateShift) ==
          ClockHandle::kStateConstruction);
 

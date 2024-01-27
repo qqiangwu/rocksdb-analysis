@@ -22,6 +22,7 @@
 #include "rocksdb/listener.h"
 #include "rocksdb/metadata.h"
 #include "rocksdb/options.h"
+#include "rocksdb/rocksdb_namespace.h"
 #include "rocksdb/snapshot.h"
 #include "rocksdb/sst_file_writer.h"
 #include "rocksdb/thread_status.h"
@@ -781,7 +782,7 @@ class DB {
   //                internally by the API - the input array will not be
   //                modified
   virtual void MultiGet(const ReadOptions& options, const size_t num_keys,
-                        ColumnFamilyHandle** column_families, const Slice* keys,
+                        ColumnFamilyHandle** column_families CPPSAFE_LIFETIME_IN, const Slice* keys,
                         PinnableSlice* values, Status* statuses,
                         const bool /*sorted_input*/ = false) {
     std::vector<ColumnFamilyHandle*> cf;
@@ -801,7 +802,7 @@ class DB {
     }
   }
   virtual void MultiGet(const ReadOptions& options, const size_t num_keys,
-                        ColumnFamilyHandle** column_families, const Slice* keys,
+                        ColumnFamilyHandle** column_families CPPSAFE_LIFETIME_IN, const Slice* keys,
                         PinnableSlice* values, std::string* timestamps,
                         Status* statuses, const bool /*sorted_input*/ = false) {
     std::vector<ColumnFamilyHandle*> cf;
@@ -875,7 +876,7 @@ class DB {
   // number of contiguous objects (ColumnFamilyHandle pointers, Slices,
   // PinnableWideColumns, and Statuses respectively).
   virtual void MultiGetEntity(const ReadOptions& /* options */, size_t num_keys,
-                              ColumnFamilyHandle** /* column_families */,
+                              ColumnFamilyHandle** column_families CPPSAFE_LIFETIME_IN,
                               const Slice* /* keys */,
                               PinnableWideColumns* /* results */,
                               Status* statuses,

@@ -27,6 +27,7 @@
 #include "rocksdb/filter_policy.h"
 #include "rocksdb/flush_block_policy.h"
 #include "rocksdb/memory_allocator.h"
+#include "rocksdb/rocksdb_namespace.h"
 #include "rocksdb/secondary_cache.h"
 #include "rocksdb/slice_transform.h"
 #include "rocksdb/sst_partitioner.h"
@@ -92,7 +93,7 @@ class TestCustomizable : public Customizable {
                                  std::shared_ptr<TestCustomizable>* result);
   static Status CreateFromString(const ConfigOptions& opts,
                                  const std::string& value,
-                                 TestCustomizable** result);
+                                 TestCustomizable** result CPPSAFE_LIFETIME_INOUT);
   bool IsInstanceOf(const std::string& name) const override {
     if (name == kClassName()) {
       return true;
@@ -1538,7 +1539,7 @@ class LoadCustomizableTest : public testing::Test {
   }
 
   template <typename T, typename U>
-  Status TestCreateStatic(const std::string& name, U** result,
+  Status TestCreateStatic(const std::string& name, U** result CPPSAFE_LIFETIME_INOUT,
                           bool delete_result = false) {
     Status s = T::CreateFromString(config_options_, name, result);
     if (s.ok()) {
@@ -1657,7 +1658,7 @@ class LoadCustomizableTest : public testing::Test {
   }
 
   template <typename T, typename U>
-  Status TestStaticBuiltins(const std::string& mock, U** object,
+  Status TestStaticBuiltins(const std::string& mock, U** object CPPSAFE_LIFETIME_CONST,
                             const std::unordered_set<std::string>& expected,
                             std::vector<std::string>* failed,
                             bool delete_objects = false) {

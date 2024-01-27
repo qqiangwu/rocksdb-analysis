@@ -7,6 +7,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file. See the AUTHORS file for names of contributors.
 #include "table/block_based/block_based_table_iterator.h"
+#include "rocksdb/rocksdb_namespace.h"
 
 namespace ROCKSDB_NAMESPACE {
 
@@ -854,7 +855,6 @@ void BlockBasedTableIterator::BlockCacheLookupForReadAheadSize(
     auto it = block_handles_.rbegin();
     auto it_end =
         block_handles_.rbegin() + (block_handles_.size() - prev_handles_size);
-
     while (it != it_end && (*it).is_cache_hit_) {
       it++;
     }

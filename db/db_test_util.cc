@@ -16,6 +16,7 @@
 #include "rocksdb/cache.h"
 #include "rocksdb/convenience.h"
 #include "rocksdb/env_encryption.h"
+#include "rocksdb/rocksdb_namespace.h"
 #include "rocksdb/unique_id.h"
 #include "rocksdb/utilities/object_registry.h"
 #include "table/format.h"

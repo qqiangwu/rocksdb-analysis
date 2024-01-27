@@ -114,7 +114,7 @@ class TieredCompactionTest : public DBTestBase,
     VerifyCompactionStats(pl_stats, expect_pl_stats);
   }
 
-  void ResetAllStats(std::vector<InternalStats::CompactionStats>& stats,
+  void ResetAllStats(std::vector<InternalStats::CompactionStats>& stats CPPSAFE_LIFETIME_CONST,
                      InternalStats::CompactionStats& pl_stats) {
     ASSERT_OK(dbfull()->ResetStats());
     for (auto& level_stats : stats) {

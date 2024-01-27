@@ -17,6 +17,7 @@
 #include "port/stack_trace.h"
 #include "rocksdb/db.h"
 #include "rocksdb/options.h"
+#include "rocksdb/rocksdb_namespace.h"
 #include "rocksdb/types.h"
 #include "rocksdb/utilities/debug.h"
 #include "rocksdb/utilities/transaction.h"
@@ -2563,6 +2564,7 @@ TEST_P(WritePreparedTransactionTest, SmallestUncommittedOptimization) {
     ASSERT_OK(transaction->Commit());
     delete transaction;
     if (has_recent_prepare) {
+      assert(txn2);
       ASSERT_OK(txn2->Commit());
       delete txn2;
     }

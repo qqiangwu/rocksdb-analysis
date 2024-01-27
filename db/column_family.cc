@@ -1134,6 +1134,7 @@ void ColumnFamilyData::CreateNewMemtable(
     delete mem_->Unref();
   }
   SetMemtable(ConstructNewMemtable(mutable_cf_options, earliest_seq));
+  [[gsl::suppress("lifetime")]]
   mem_->Ref();
 }
 

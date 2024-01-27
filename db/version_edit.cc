@@ -12,6 +12,7 @@
 #include "db/blob/blob_index.h"
 #include "db/version_set.h"
 #include "logging/event_logger.h"
+#include "rocksdb/rocksdb_namespace.h"
 #include "rocksdb/slice.h"
 #include "table/unique_id_impl.h"
 #include "test_util/sync_point.h"
@@ -321,7 +322,7 @@ bool VersionEdit::EncodeTo(std::string* dst,
   return true;
 }
 
-static bool GetInternalKey(Slice* input, InternalKey* dst) {
+static bool GetInternalKey(Slice* input CPPSAFE_LIFETIME_IN, InternalKey* dst) {
   Slice str;
   if (GetLengthPrefixedSlice(input, &str)) {
     dst->DecodeFrom(str);

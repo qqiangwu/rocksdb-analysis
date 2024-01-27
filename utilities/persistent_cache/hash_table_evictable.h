@@ -8,6 +8,7 @@
 
 #include <functional>
 
+#include "rocksdb/rocksdb_namespace.h"
 #include "util/random.h"
 #include "utilities/persistent_cache/hash_table.h"
 #include "utilities/persistent_cache/lrulist.h"
@@ -21,7 +22,7 @@ namespace ROCKSDB_NAMESPACE {
 //
 // Please note EvictableHashTable can only be created for pointer type objects
 template <class T, class Hash, class Equal>
-class EvictableHashTable : private HashTable<T*, Hash, Equal> {
+class [[gsl::Owner(T)]] EvictableHashTable : private HashTable<T*, Hash, Equal> {
  public:
   using hash_table = HashTable<T*, Hash, Equal>;
 
@@ -58,6 +59,7 @@ class EvictableHashTable : private HashTable<T*, Hash, Equal> {
   // Please note that read lock should be held by the caller. This is because
   // the caller owns the data, and should hold the read lock as long as he
   // operates on the data.
+  CPPSAFE_POST("*ret", "*this")
   bool Find(T* t, T** ret) {
     const uint64_t h = Hash()(t);
     typename hash_table::Bucket& bucket = GetBucket(h);
@@ -76,6 +78,7 @@ class EvictableHashTable : private HashTable<T*, Hash, Equal> {
   //
   // Evict one of the least recently used object
   //
+  CPPSAFE_POST("return", ":global")
   T* Evict(const std::function<void(T*)>& fn = nullptr) {
     uint32_t random = Random::GetTLSInstance()->Next();
     const size_t start_idx = random % hash_table::nlocks_;

@@ -16,6 +16,7 @@
 #include "memory/arena.h"
 #include "rocksdb/env.h"
 #include "rocksdb/iterator.h"
+#include "rocksdb/rocksdb_namespace.h"
 #include "rocksdb/slice_transform.h"
 #include "rocksdb/table.h"
 #include "rocksdb/table_properties.h"
@@ -224,6 +225,8 @@ class PlainTableReader : public TableReader {
   // format.
   // if `seekable` is not null, it will return whether we can directly read
   // data using this offset.
+  CPPSAFE_POST("*internal_key", "*internal_key", "decoder", "this")
+  CPPSAFE_POST("*value", "*value", "decoder", "this")
   Status Next(PlainTableKeyDecoder* decoder, uint32_t* offset,
               ParsedInternalKey* parsed_key, Slice* internal_key, Slice* value,
               bool* seekable = nullptr) const;

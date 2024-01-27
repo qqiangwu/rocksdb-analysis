@@ -15,6 +15,7 @@
 #include "db/compaction/compaction_iterator.h"
 #include "db/internal_stats.h"
 #include "db/output_validator.h"
+#include "rocksdb/rocksdb_namespace.h"
 
 namespace ROCKSDB_NAMESPACE {
 
@@ -126,7 +127,7 @@ class CompactionOutputs {
     if (!outputs_.empty() && outputs_[0].finished) {
       return outputs_[0].meta.smallest.user_key();
     } else {
-      return Slice{nullptr, 0};
+      return Slice{"", 0};
     }
   }
 
@@ -134,7 +135,7 @@ class CompactionOutputs {
     if (!outputs_.empty() && outputs_.back().finished) {
       return outputs_.back().meta.largest.user_key();
     } else {
-      return Slice{nullptr, 0};
+      return Slice{"", 0};
     }
   }
 

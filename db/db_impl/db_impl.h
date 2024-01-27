@@ -53,6 +53,7 @@
 #include "rocksdb/db.h"
 #include "rocksdb/env.h"
 #include "rocksdb/memtablerep.h"
+#include "rocksdb/rocksdb_namespace.h"
 #include "rocksdb/status.h"
 #include "rocksdb/trace_reader_writer.h"
 #include "rocksdb/transaction_log.h"
@@ -2196,6 +2197,7 @@ class DBImpl : public DB {
 
   // Request compaction tasks token from compaction thread limiter.
   // It always succeeds if force = true or limiter is disable.
+  CPPSAFE_LIFETIME_CONST
   bool RequestCompactionToken(ColumnFamilyData* cfd, bool force,
                               std::unique_ptr<TaskLimiterToken>* token,
                               LogBuffer* log_buffer);
@@ -2340,7 +2342,7 @@ class DBImpl : public DB {
                       Status* statuses, bool sorted_input);
 
   void MultiGetCommon(const ReadOptions& options, const size_t num_keys,
-                      ColumnFamilyHandle** column_families, const Slice* keys,
+                      ColumnFamilyHandle** column_families CPPSAFE_LIFETIME_IN, const Slice* keys,
                       PinnableSlice* values, PinnableWideColumns* columns,
                       std::string* timestamps, Status* statuses,
                       bool sorted_input);

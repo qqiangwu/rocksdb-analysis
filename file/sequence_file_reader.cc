@@ -16,6 +16,7 @@
 #include "monitoring/histogram.h"
 #include "monitoring/iostats_context_imp.h"
 #include "port/port.h"
+#include "rocksdb/rocksdb_namespace.h"
 #include "test_util/sync_point.h"
 #include "util/aligned_buffer.h"
 #include "util/random.h"

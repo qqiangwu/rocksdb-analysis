@@ -18,6 +18,7 @@
 #include "cache/lru_cache.h"
 #include "cache/typed_cache.h"
 #include "port/stack_trace.h"
+#include "rocksdb/rocksdb_namespace.h"
 #include "test_util/secondary_cache_test_util.h"
 #include "test_util/testharness.h"
 #include "util/coding.h"

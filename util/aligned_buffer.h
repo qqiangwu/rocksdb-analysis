@@ -12,6 +12,7 @@
 #include <cassert>
 
 #include "port/port.h"
+#include "rocksdb/rocksdb_namespace.h"
 
 namespace ROCKSDB_NAMESPACE {
 
@@ -54,7 +55,7 @@ inline size_t Rounddown(size_t x, size_t y) { return (x / y) * y; }
 //   ...
 //   buf.AllocateNewBuffer(2*user_requested_buf_size, /*copy_data*/ true,
 //                         copy_offset, copy_len);
-class AlignedBuffer {
+class [[gsl::Owner(char)]] AlignedBuffer {
   size_t alignment_;
   std::unique_ptr<char[]> buf_;
   size_t capacity_;
@@ -96,10 +97,12 @@ class AlignedBuffer {
 
   const char* BufferStart() const { return bufstart_; }
 
+  CPPSAFE_LIFETIME_CONST
   char* BufferStart() { return bufstart_; }
 
   void Clear() { cursize_ = 0; }
 
+  CPPSAFE_POST(Return, Global)
   char* Release() {
     cursize_ = 0;
     capacity_ = 0;
@@ -230,6 +233,7 @@ class AlignedBuffer {
   // errors.
   char* Destination() { return bufstart_ + cursize_; }
 
+  CPPSAFE_LIFETIME_CONST
   void Size(size_t cursize) { cursize_ = cursize; }
 };
 }  // namespace ROCKSDB_NAMESPACE

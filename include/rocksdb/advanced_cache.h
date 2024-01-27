@@ -314,6 +314,7 @@ class Cache {
    */
   // REQUIRES: handle must not have been released yet.
   // REQUIRES: handle must have been returned by a method on *this.
+  [[clang::annotate("cppsafe::may_discard")]]
   virtual bool Release(Handle* handle, bool erase_if_last_ref = false) = 0;
 
   // Return the object assiciated with a handle returned by a successful
@@ -522,6 +523,7 @@ class Cache {
 
   // A convenient wrapper around WaitAll() and AsyncLookupHandle::Result()
   // for a single async handle. See StartAsyncLookup().
+  [[clang::annotate("cppsafe::may_discard")]]
   Handle* Wait(AsyncLookupHandle& async_handle);
 
   // Wait for an array of async handles to get results, so that none are left

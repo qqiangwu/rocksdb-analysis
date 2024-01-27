@@ -40,6 +40,7 @@
 #include "rocksdb/advanced_options.h"
 #include "rocksdb/env.h"
 #include "rocksdb/rate_limiter.h"
+#include "rocksdb/rocksdb_namespace.h"
 #include "rocksdb/statistics.h"
 #include "rocksdb/transaction_log.h"
 #include "table/sst_file_dumper.h"

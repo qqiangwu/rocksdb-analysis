@@ -7,6 +7,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file. See the AUTHORS file for names of contributors.
 
+#include "rocksdb/rocksdb_namespace.h"
 #if !defined(OS_WIN)
 
 #include "rocksdb/utilities/backup_engine.h"
@@ -690,6 +691,7 @@ class BackupEngineTest : public testing::Test {
     ASSERT_OK(CreateLoggerFromOptions(dbname_, logger_options, &logger_));
   }
 
+  CPPSAFE_POST("return", ":global")
   DB* OpenDB() {
     DB* db;
     EXPECT_OK(DB::Open(options_, dbname_, &db));

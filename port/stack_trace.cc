@@ -4,6 +4,7 @@
 //  (found in the LICENSE.Apache file in the root directory).
 //
 #include "port/stack_trace.h"
+#include "rocksdb/rocksdb_namespace.h"
 
 #if !(defined(ROCKSDB_BACKTRACE) || defined(OS_MACOSX)) || defined(CYGWIN) || \
     defined(OS_SOLARIS) || defined(OS_WIN)
@@ -158,7 +159,7 @@ const char* GetLldbScriptSelectThread(long long tid) {
 
 }  // namespace
 
-void PrintStack(void* frames[], int num_frames) {
+void PrintStack(void* frames CPPSAFE_LIFETIME_IN [], int num_frames) {
   auto symbols = backtrace_symbols(frames, num_frames);
 
   for (int i = 0; i < num_frames; ++i) {
