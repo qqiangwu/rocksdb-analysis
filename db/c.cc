@@ -529,7 +529,7 @@ struct rocksdb_universal_compaction_options_t {
   ROCKSDB_NAMESPACE::CompactionOptionsUniversal* rep;
 };
 
-static bool SaveError(char** errptr, const Status& s) {
+static bool SaveError(char** errptr CPPSAFE_LIFETIME_INOUT, const Status& s) {
   assert(errptr != nullptr);
   if (s.ok()) {
     return false;

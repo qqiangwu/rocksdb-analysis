@@ -181,7 +181,7 @@ class CompactionFilter : public Customizable {
   static const char* Type() { return "CompactionFilter"; }
   static Status CreateFromString(const ConfigOptions& config_options,
                                  const std::string& name,
-                                 const CompactionFilter** result CPPSAFE_LIFETIME_CONST);
+                                 const CompactionFilter** result);
 
   // The table file creation process invokes this method before adding a kv to
   // the table file. A return value of false indicates that the kv should be

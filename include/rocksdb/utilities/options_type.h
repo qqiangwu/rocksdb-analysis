@@ -714,6 +714,7 @@ class OptionTypeInfo {
 
   bool IsCustomizable() const { return (type_ == OptionType::kCustomizable); }
 
+  CPPSAFE_POST("return", "base")
   inline const void* GetOffset(const void* base) const {
     return static_cast<const char*>(base) + offset_;
   }
@@ -723,12 +724,14 @@ class OptionTypeInfo {
   }
 
   template <typename T>
+  CPPSAFE_POST("return", "base")
   const T* GetOffsetAs(const void* base) const {
     const void* addr = GetOffset(base);
     return static_cast<const T*>(addr);
   }
 
   template <typename T>
+  CPPSAFE_POST("return", "base")
   T* GetOffsetAs(void* base) const {
     void* addr = GetOffset(base);
     return static_cast<T*>(addr);
@@ -737,6 +740,7 @@ class OptionTypeInfo {
   // Returns the underlying pointer for the type at base_addr
   // The value returned is the underlying "raw" pointer, offset from base.
   template <typename T>
+  CPPSAFE_POST("return", "base_addr", ":null")
   const T* AsRawPointer(const void* const base_addr) const {
     if (base_addr == nullptr) {
       return nullptr;
@@ -758,6 +762,7 @@ class OptionTypeInfo {
   // Returns the underlying pointer for the type at base_addr
   // The value returned is the underlying "raw" pointer, offset from base.
   template <typename T>
+  CPPSAFE_POST("return", "base_addr", ":null")
   T* AsRawPointer(void* base_addr) const {
     if (base_addr == nullptr) {
       return nullptr;
@@ -898,7 +903,7 @@ class OptionTypeInfo {
   // For "embedded" options (like structs), elem_name may be opt_name
   // or a field within the opt_name.  For example, given the struct "struct",
   // and opt_name of "struct.field", elem_name will be "field"
-  CPPSAFE_POST("return", "*opt_map")
+  CPPSAFE_POST("return", "*opt_map", ":null")
   static const OptionTypeInfo* Find(
       const std::string& opt_name,
       const std::unordered_map<std::string, OptionTypeInfo>& opt_map,

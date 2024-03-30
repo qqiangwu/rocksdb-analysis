@@ -31,6 +31,7 @@
 #include "cache/cache_helpers.h"
 #include "rocksdb/advanced_cache.h"
 #include "rocksdb/advanced_options.h"
+#include "rocksdb/rocksdb_namespace.h"
 
 namespace ROCKSDB_NAMESPACE {
 
@@ -105,7 +106,9 @@ class BasicTypedCacheHelperFns {
   using TValuePtr = std::remove_extent_t<TValue>*;
 
  protected:
+  CPPSAFE_POST("return", "value")
   inline static ObjectPtr UpCastValue(TValuePtr value) { return value; }
+  CPPSAFE_POST("return", "value")
   inline static TValuePtr DownCastValue(ObjectPtr value) {
     return static_cast<TValuePtr>(value);
   }
