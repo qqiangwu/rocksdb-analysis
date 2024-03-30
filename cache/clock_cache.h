@@ -24,6 +24,7 @@
 #include "port/mmap.h"
 #include "port/port.h"
 #include "rocksdb/cache.h"
+#include "rocksdb/rocksdb_namespace.h"
 #include "rocksdb/secondary_cache.h"
 #include "util/atomic.h"
 #include "util/autovector.h"
@@ -578,7 +579,7 @@ class FixedHyperClockTable : public BaseClockTable {
 
   HandleImpl* Lookup(const UniqueId64x2& hashed_key);
 
-  [[clang::annotate("cppsafe::may_discard")]]
+  CPPSAFE_POST("handle", ":invalid")
   bool Release(HandleImpl* handle, bool useful, bool erase_if_last_ref);
 
   void Erase(const UniqueId64x2& hashed_key);
@@ -1024,6 +1025,7 @@ class ALIGN_AS(CACHE_LINE_SIZE) ClockCacheShard final : public CacheShardBase {
 
   // For reconstructing key from hashed_key. Requires the caller to provide
   // backing storage for the Slice in `unhashed`
+  CPPSAFE_POST("return", "unhashed")
   static inline Slice ReverseHash(const UniqueId64x2& hashed,
                                   UniqueId64x2* unhashed, uint32_t seed) {
     BijectiveUnhash2x64(hashed[1], hashed[0], &(*unhashed)[1], &(*unhashed)[0]);

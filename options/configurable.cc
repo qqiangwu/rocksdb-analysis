@@ -310,7 +310,6 @@ Status ConfigurableHelper::ConfigureSomeOptions(
         } else {
           found++;
           it = options->erase(it);
-          __lifetime_pmap();
           if (!s.ok()) {
             result = s;
           }

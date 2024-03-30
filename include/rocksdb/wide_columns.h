@@ -156,6 +156,7 @@ inline void PinnableWideColumns::MoveValue(std::string&& value) {
   assert(buf);
 
   *buf = std::move(value);
+
   value_.PinSelf();
 }
 

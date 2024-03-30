@@ -22,6 +22,7 @@ T* GetFromCacheHandle(Cache* cache, Cache::Handle* handle) {
 
 // Turns a T* into a Slice so it can be used as a key with Cache.
 template <typename T>
+CPPSAFE_POST("return", "t")
 Slice GetSliceForKey(const T* t) {
   return Slice(reinterpret_cast<const char*>(t), sizeof(T));
 }

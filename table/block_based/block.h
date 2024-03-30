@@ -234,7 +234,7 @@ class Block {
   // It is determined by IndexType property of the table.
   // `user_defined_timestamps_persisted` controls whether a min timestamp is
   // padded while key is being parsed from the block.
-  CPPSAFE_POST("return", ":global")
+  CPPSAFE_POST("return", ":global", "iter")
   IndexBlockIter* NewIndexIterator(
       const Comparator* raw_ucmp, SequenceNumber global_seqno,
       IndexBlockIter* iter, Statistics* stats, bool total_order_seek,

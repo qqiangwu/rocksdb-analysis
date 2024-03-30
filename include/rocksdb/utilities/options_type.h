@@ -714,6 +714,7 @@ class OptionTypeInfo {
 
   bool IsCustomizable() const { return (type_ == OptionType::kCustomizable); }
 
+  CPPSAFE_POST("return", "base")
   inline const void* GetOffset(const void* base) const {
     return static_cast<const char*>(base) + offset_;
   }
@@ -723,12 +724,14 @@ class OptionTypeInfo {
   }
 
   template <typename T>
+  CPPSAFE_POST("return", "base")
   const T* GetOffsetAs(const void* base) const {
     const void* addr = GetOffset(base);
     return static_cast<const T*>(addr);
   }
 
   template <typename T>
+  CPPSAFE_POST("return", "base")
   T* GetOffsetAs(void* base) const {
     void* addr = GetOffset(base);
     return static_cast<T*>(addr);
@@ -737,6 +740,7 @@ class OptionTypeInfo {
   // Returns the underlying pointer for the type at base_addr
   // The value returned is the underlying "raw" pointer, offset from base.
   template <typename T>
+  CPPSAFE_POST("return", "base_addr")
   const T* AsRawPointer(const void* const base_addr) const {
     if (base_addr == nullptr) {
       return nullptr;

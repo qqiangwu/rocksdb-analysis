@@ -3082,7 +3082,6 @@ TEST_P(ColumnFamilyTest, FlushCloseWALFiles) {
   Reopen();
   ASSERT_EQ("mirko", Get(0, "fodor"));
   ASSERT_EQ("mirko", Get(1, "fodor"));
-  db_options_.env = env_;
   Close();
 }
 
